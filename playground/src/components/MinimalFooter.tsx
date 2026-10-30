@@ -2,37 +2,22 @@
 
 import { useEffect, useState } from 'react';
 
-/**
- * Calculates human-readable relative time from a reference timestamp.
- * Supports: 'build 2 hours ago', 'build 4 days ago', 'build 2 weeks ago',
- * 'build 1 month ago', 'build 1 year ago', etc.
- */
-function getRelativeBuildTime(timestamp: number): string {
-  const diffMs = Math.max(0, Date.now() - timestamp);
-  const seconds = Math.floor(diffMs / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const weeks = Math.floor(days / 7);
-  const months = Math.floor(days / 30);
-  const years = Math.floor(days / 365);
-
-  if (years > 0) return `build ${years} ${years === 1 ? 'year' : 'years'} ago`;
-  if (months > 0) return `build ${months} ${months === 1 ? 'month' : 'months'} ago`;
-  if (weeks > 0) return `build ${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
-  if (days > 0) return `build ${days} ${days === 1 ? 'day' : 'days'} ago`;
-  if (hours > 0) return `build ${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
-  if (minutes > 0) return `build ${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
-  return 'build just now';
-}
+const BUILD_MILESTONES = [
+  'build 2 hours ago',
+  'build 4 days ago',
+  'build 2 weeks ago',
+  'build 1 month ago',
+  'build 1 year ago',
+];
 
 export function MinimalFooter() {
-  const [buildTimeText, setBuildTimeText] = useState('build 2 hours ago');
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    // Relative to the project initial milestone (2 hours prior)
-    const initialMilestone = Date.now() - 2 * 60 * 60 * 1000;
-    setBuildTimeText(getRelativeBuildTime(initialMilestone));
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % BUILD_MILESTONES.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -54,10 +39,10 @@ export function MinimalFooter() {
           </span>
         </div>
 
-        {/* Right: Pure text build time (no pill, no blinking dot) */}
+        {/* Right: Pure text build time (dynamic rotating relative milestone) */}
         <div>
-          <span className="font-mono text-xs text-[#737373]">
-            {buildTimeText}
+          <span className="font-mono text-xs text-[#737373] transition-all duration-300">
+            {BUILD_MILESTONES[index]}
           </span>
         </div>
       </div>

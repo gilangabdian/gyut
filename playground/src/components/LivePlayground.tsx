@@ -18,7 +18,6 @@ export function LivePlayground() {
   const [customColors, setCustomColors] = useState('#FF5FCF, #FFFFFF');
   const [afterGlitchType, setAfterGlitchType] = useState<'none' | 'hide' | 'replace'>('none');
   const [replaceText, setReplaceText] = useState('SYSTEM RESTORED');
-  const [copiedCode, setCopiedCode] = useState(false);
 
   // Initialize or re-initialize glitch instance whenever options change
   useEffect(() => {
@@ -70,39 +69,6 @@ export function LivePlayground() {
 
   const handleStop = () => {
     instanceRef.current?.stop();
-  };
-
-  // Generate dynamic TypeScript code snippet
-  const generatedCode = `import { createGlitch } from 'gyut';
-
-const glitch = createGlitch('#target', {
-  intensity: ${intensity},
-  speed: ${speed},
-  shape: '${shape}',
-  trigger: '${trigger}',${
-    colorMode === 'custom'
-      ? `\n  colors: [${customColors
-          .split(',')
-          .map((c) => `'${c.trim()}'`)
-          .join(', ')}],`
-      : '\n  // colors: undefined (default random coherent palettes)'
-  }${
-    afterGlitchType === 'hide'
-      ? `\n  afterGlitch: {\n    type: 'hide',\n    mode: 'opacity',\n  },`
-      : afterGlitchType === 'replace'
-      ? `\n  afterGlitch: {\n    type: 'replace',\n    text: '${replaceText}',\n  },`
-      : ''
-  }
-});`;
-
-  const handleCopyCode = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedCode);
-      setCopiedCode(true);
-      setTimeout(() => setCopiedCode(false), 2000);
-    } catch {
-      // Fallback
-    }
   };
 
   return (
@@ -331,26 +297,6 @@ const glitch = createGlitch('#target', {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Row 2: Underneath Code Snippet (Full Width across bottom) */}
-      <div className="w-full mt-8 bg-[#0a0a0f] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-        <div className="flex items-center justify-between px-5 py-3.5 bg-[#12121a] border-b border-white/10">
-          <span className="font-mono text-xs text-[#EDEDED]/80 font-medium">TypeScript Code Snippet</span>
-          <button
-            onClick={handleCopyCode}
-            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#FF5FCF] hover:text-black border border-white/10 text-xs font-mono text-[#EDEDED] transition-all flex items-center gap-1.5"
-          >
-            {copiedCode ? (
-              <span className="text-[#00FF66] font-bold">Copied!</span>
-            ) : (
-              <span>Copy Code</span>
-            )}
-          </button>
-        </div>
-        <pre className="p-5 overflow-x-auto font-mono text-xs leading-relaxed text-[#EDEDED]/90 bg-[#060609]">
-          <code>{generatedCode}</code>
-        </pre>
       </div>
     </section>
   );

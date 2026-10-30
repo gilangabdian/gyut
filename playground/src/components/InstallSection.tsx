@@ -72,10 +72,10 @@ export function InstallSection() {
             title="Copy command">
             {copied ? (
               <>
-                <svg className="w-4 h-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 text-[#FF5FCF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-[#00FF66]">Copied!</span>
+                <span className="text-[#FF5FCF] font-bold">Copied!</span>
               </>
             ) : (
               <>
