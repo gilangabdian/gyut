@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
 const BUILD_MILESTONES = [
   'build 2 hours ago',
@@ -8,17 +8,17 @@ const BUILD_MILESTONES = [
   'build 2 weeks ago',
   'build 1 month ago',
   'build 1 year ago',
-];
+]
 
 export function MinimalFooter() {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % BUILD_MILESTONES.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+      setIndex((prev) => (prev + 1) % BUILD_MILESTONES.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <footer className="w-full mt-auto pt-16 pb-0 flex flex-col items-center bg-[#000000] border-t border-white/[0.08] overflow-hidden">
@@ -34,9 +34,7 @@ export function MinimalFooter() {
           >
             GitHub
           </a>
-          <span className="text-[#737373]">
-            MIT
-          </span>
+          <span className="text-[#737373]">MIT</span>
         </div>
 
         {/* Right: Pure text build time (dynamic rotating relative milestone) */}
@@ -54,5 +52,5 @@ export function MinimalFooter() {
         </span>
       </div>
     </footer>
-  );
+  )
 }

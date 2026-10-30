@@ -1,40 +1,40 @@
-'use client';
+'use client'
 
-import { useEffect, useRef, useState } from 'react';
-import { createGlitch } from 'gyut';
-import type { GlitchShape } from 'gyut';
+import { useEffect, useRef, useState } from 'react'
+import { createGlitch } from 'gyut'
+import type { GlitchShape } from 'gyut'
 
 export function DemosShowcase() {
-  const demo1Ref = useRef<HTMLDivElement>(null);
-  const demo2Ref = useRef<HTMLDivElement>(null);
-  const demo3Ref = useRef<HTMLDivElement>(null);
-  const demo4Ref = useRef<HTMLDivElement>(null);
+  const demo1Ref = useRef<HTMLDivElement>(null)
+  const demo2Ref = useRef<HTMLDivElement>(null)
+  const demo3Ref = useRef<HTMLDivElement>(null)
+  const demo4Ref = useRef<HTMLDivElement>(null)
 
-  const demo3InstanceRef = useRef<ReturnType<typeof createGlitch> | null>(null);
-  const demo4InstanceRef = useRef<ReturnType<typeof createGlitch> | null>(null);
+  const demo3InstanceRef = useRef<ReturnType<typeof createGlitch> | null>(null)
+  const demo4InstanceRef = useRef<ReturnType<typeof createGlitch> | null>(null)
 
-  const [activeShape, setActiveShape] = useState<GlitchShape>('classic');
+  const [activeShape, setActiveShape] = useState<GlitchShape>('classic')
 
   useEffect(() => {
     // 1. Random Colors Demo
-    let g1: ReturnType<typeof createGlitch> | undefined;
+    let g1: ReturnType<typeof createGlitch> | undefined
     if (demo1Ref.current) {
       g1 = createGlitch(demo1Ref.current, {
         intensity: 0.5,
         speed: 1,
         trigger: 'always',
-      });
+      })
     }
 
     // 2. Custom Chromatic Aberration Demo
-    let g2: ReturnType<typeof createGlitch> | undefined;
+    let g2: ReturnType<typeof createGlitch> | undefined
     if (demo2Ref.current) {
       g2 = createGlitch(demo2Ref.current, {
         intensity: 0.65,
         speed: 1,
         trigger: 'always',
         colors: ['#FF5FCF', '#00F0FF', '#FFE600'],
-      });
+      })
     }
 
     // 3. Shape Presets Demo
@@ -45,7 +45,7 @@ export function DemosShowcase() {
         trigger: 'always',
         shape: activeShape,
         colors: ['#FF5FCF', '#00F0FF'],
-      });
+      })
     }
 
     // 4. Post-Glitch Replace Demo
@@ -60,35 +60,35 @@ export function DemosShowcase() {
           type: 'replace',
           text: 'SYSTEM RESTORED',
         },
-      });
+      })
     }
 
     return () => {
-      g1?.destroy();
-      g2?.destroy();
-      demo3InstanceRef.current?.destroy();
-      demo4InstanceRef.current?.destroy();
-    };
-  }, []);
+      g1?.destroy()
+      g2?.destroy()
+      demo3InstanceRef.current?.destroy()
+      demo4InstanceRef.current?.destroy()
+    }
+  }, [])
 
   // Update shape when activeShape changes
   const handleShapeChange = (shape: GlitchShape) => {
-    setActiveShape(shape);
+    setActiveShape(shape)
     if (demo3Ref.current) {
-      demo3InstanceRef.current?.destroy();
+      demo3InstanceRef.current?.destroy()
       demo3InstanceRef.current = createGlitch(demo3Ref.current, {
         intensity: 0.6,
         speed: 1,
         trigger: 'always',
         shape,
         colors: ['#FF5FCF', '#00F0FF'],
-      });
+      })
     }
-  };
+  }
 
   const handleTriggerDemo4 = () => {
-    demo4InstanceRef.current?.replay();
-  };
+    demo4InstanceRef.current?.replay()
+  }
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-16">
@@ -109,13 +109,16 @@ export function DemosShowcase() {
               <span className="font-mono text-xs text-[#EDEDED]/90 uppercase tracking-wider bg-white/5 px-2.5 py-1 rounded-md border border-white/10">
                 01. Random Mode
               </span>
-              <span className="font-mono text-xs text-[#737373]">trigger: &apos;always&apos;</span>
+              <span className="font-mono text-xs text-[#737373]">
+                trigger: &apos;always&apos;
+              </span>
             </div>
             <h3 className="font-display text-xl font-bold text-[#EDEDED] mb-2">
               Coherent Random Palettes
             </h3>
             <p className="text-sm font-sans text-[#737373] mb-6">
-              Random contrast pairs selected at burst onset, eliminating strobe flickering.
+              Random contrast pairs selected at burst onset, eliminating strobe
+              flickering.
             </p>
           </div>
 
@@ -136,13 +139,16 @@ export function DemosShowcase() {
               <span className="font-mono text-xs text-[#FF5FCF] uppercase tracking-wider bg-[#FF5FCF]/10 px-2.5 py-1 rounded-md border border-[#FF5FCF]/20">
                 02. Custom Colors
               </span>
-              <span className="font-mono text-xs text-[#737373]">3+ colors stacked</span>
+              <span className="font-mono text-xs text-[#737373]">
+                3+ colors stacked
+              </span>
             </div>
             <h3 className="font-display text-xl font-bold text-[#EDEDED] mb-2">
               Chromatic Aberration
             </h3>
             <p className="text-sm font-sans text-[#737373] mb-6">
-              Multi-color displacement layers rendered via text-shadow without extra DOM nodes.
+              Multi-color displacement layers rendered via text-shadow without
+              extra DOM nodes.
             </p>
           </div>
 
@@ -183,7 +189,8 @@ export function DemosShowcase() {
               Preset Distortion Geometry
             </h3>
             <p className="text-sm font-sans text-[#737373] mb-6">
-              Switch between classic horizontal displacement, thin razor slices, or blocky fragments.
+              Switch between classic horizontal displacement, thin razor slices,
+              or blocky fragments.
             </p>
           </div>
 
@@ -216,7 +223,8 @@ export function DemosShowcase() {
               Smooth Text Replacement
             </h3>
             <p className="text-sm font-sans text-[#737373] mb-6">
-              Glitch effect runs before smoothly resolving into new text without layout jump.
+              Glitch effect runs before smoothly resolving into new text without
+              layout jump.
             </p>
           </div>
 
@@ -231,6 +239,5 @@ export function DemosShowcase() {
         </div>
       </div>
     </section>
-  );
+  )
 }
-

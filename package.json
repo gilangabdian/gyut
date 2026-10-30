@@ -6,10 +6,16 @@
     "build": "pnpm --filter gyut build",
     "build:playground": "pnpm --filter playground build",
     "test": "pnpm --filter gyut test",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "packageManager": "pnpm@11.18.0",
   "devDependencies": {
+    "oxlint": "^1.90.0",
+    "prettier": "^3.9.10",
     "typescript": "^7.0.2"
   }
 }

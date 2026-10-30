@@ -1,9 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --color-brand: #FF5FCF;
-  --color-cyan-neon: #00F0FF;
-  --color-yellow-neon: #FFE600;
+  --color-brand: #ff5fcf;
+  --color-cyan-neon: #00f0ff;
+  --color-yellow-neon: #ffe600;
   --color-dark-bg: #000000;
   --color-dark-surface: #0a0a0f;
   --color-dark-card: #12121a;
@@ -16,12 +16,12 @@
 
 :root {
   --background: #000000;
-  --foreground: #EDEDED;
+  --foreground: #ededed;
 }
 
 body {
   background-color: #000000;
-  color: #EDEDED;
+  color: #ededed;
   overflow-x: hidden;
 }
 
@@ -38,7 +38,8 @@ body {
 
 /* Cloud subtle float animations */
 @keyframes cloud-float-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) scale(1);
   }
   50% {
@@ -47,7 +48,8 @@ body {
 }
 
 @keyframes cloud-float-reverse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -65,7 +67,9 @@ body {
 
 /* Polaroid subtle hover lift */
 .polaroid-card {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
 }
 
 .polaroid-card:hover {

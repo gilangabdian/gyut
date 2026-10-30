@@ -1,4 +1,4 @@
-const STYLE_ID = 'gyut-injected-styles';
+const STYLE_ID = 'gyut-injected-styles'
 
 /**
  * Shared stylesheet content containing static keyframes, base target rules,
@@ -195,55 +195,54 @@ const GYUT_CSS = `
     transform: translate(calc(var(--gyut-intensity, 1) * -8px), calc(var(--gyut-intensity, 1) * -6px));
   }
 }
-`.trim();
+`.trim()
 
 /**
  * Singleton stylesheet registry that tracks reference counts across all active
  * GYUT instances in the current document.
  */
 class StyleRegistry {
-  private static instance: StyleRegistry | null = null;
-  private refCount = 0;
-  private styleEl: HTMLStyleElement | null = null;
+  private static instance: StyleRegistry | null = null
+  private refCount = 0
+  private styleEl: HTMLStyleElement | null = null
 
   static getInstance(): StyleRegistry {
     if (!StyleRegistry.instance) {
-      StyleRegistry.instance = new StyleRegistry();
+      StyleRegistry.instance = new StyleRegistry()
     }
-    return StyleRegistry.instance;
+    return StyleRegistry.instance
   }
 
   getReferencesCount(): number {
-    return this.refCount;
+    return this.refCount
   }
 
   retain(): void {
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined') return
 
     if (this.refCount === 0) {
-      let el = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
+      let el = document.getElementById(STYLE_ID) as HTMLStyleElement | null
       if (!el) {
-        el = document.createElement('style');
-        el.id = STYLE_ID;
-        el.setAttribute('data-gyut-styles', 'true');
-        el.textContent = GYUT_CSS;
-        document.head.appendChild(el);
+        el = document.createElement('style')
+        el.id = STYLE_ID
+        el.setAttribute('data-gyut-styles', 'true')
+        el.textContent = GYUT_CSS
+        document.head.appendChild(el)
       }
-      this.styleEl = el;
+      this.styleEl = el
     }
-    this.refCount++;
+    this.refCount++
   }
 
   release(): void {
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined') return
 
-    this.refCount = Math.max(0, this.refCount - 1);
+    this.refCount = Math.max(0, this.refCount - 1)
     if (this.refCount === 0 && this.styleEl) {
-      this.styleEl.remove();
-      this.styleEl = null;
+      this.styleEl.remove()
+      this.styleEl = null
     }
   }
 }
 
-export const styleRegistry = StyleRegistry.getInstance();
-
+export const styleRegistry = StyleRegistry.getInstance()

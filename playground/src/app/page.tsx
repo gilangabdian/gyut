@@ -1,8 +1,8 @@
-import { HeroClouds } from '../components/HeroClouds';
-import { InstallSection } from '../components/InstallSection';
-import { DemosShowcase } from '../components/DemosShowcase';
-import { LivePlayground } from '../components/LivePlayground';
-import { MinimalFooter } from '../components/MinimalFooter';
+import { HeroClouds } from '../components/HeroClouds'
+import { InstallSection } from '../components/InstallSection'
+import { DemosShowcase } from '../components/DemosShowcase'
+import { LivePlayground } from '../components/LivePlayground'
+import { MinimalFooter } from '../components/MinimalFooter'
 
 export default function Home() {
   return (
@@ -24,5 +24,5 @@ export default function Home() {
       {/* 5. Minimal Dock Footer with gilangabdian GitHub */}
       <MinimalFooter />
     </div>
-  );
+  )
 }

@@ -1,24 +1,26 @@
-import { getRandomGlitchColors } from './palette.js';
+import { getRandomGlitchColors } from './palette.js'
 
 export interface ResolvedColors {
-  color1: string;
-  color2: string;
-  textShadow?: string;
+  color1: string
+  color2: string
+  textShadow?: string
 }
 
 /**
  * Validates a color string to ensure it is non-empty and well-formed.
  */
 export function isValidColorString(color: unknown): color is string {
-  if (typeof color !== 'string') return false;
-  const trimmed = color.trim();
-  if (!trimmed) return false;
+  if (typeof color !== 'string') return false
+  const trimmed = color.trim()
+  if (!trimmed) return false
   // Accepts hex, rgb, rgba, hsl, hsla, or standard named css colors
   return (
-    /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(trimmed) ||
+    /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(
+      trimmed
+    ) ||
     /^(rgb|rgba|hsl|hsla)\(/.test(trimmed) ||
     /^[a-zA-Z]+$/.test(trimmed)
-  );
+  )
 }
 
 /**
@@ -33,14 +35,16 @@ export function resolveGlitchColors(
   randomFn: () => number = Math.random
 ): ResolvedColors {
   if (!userColors || userColors.length === 0) {
-    const [c1, c2] = getRandomGlitchColors(randomFn);
-    return { color1: c1, color2: c2 };
+    const [c1, c2] = getRandomGlitchColors(randomFn)
+    return { color1: c1, color2: c2 }
   }
 
   // Validate colors
   for (const c of userColors) {
     if (!isValidColorString(c)) {
-      throw new Error(`[GYUT] Invalid color provided: "${String(c)}". Expected valid hex, rgb, hsl, or named CSS color.`);
+      throw new Error(
+        `[GYUT] Invalid color provided: "${String(c)}". Expected valid hex, rgb, hsl, or named CSS color.`
+      )
     }
   }
 
@@ -49,37 +53,36 @@ export function resolveGlitchColors(
     return {
       color1: userColors[0]!,
       color2: 'transparent',
-    };
+    }
   }
 
-  const color1 = userColors[0]!;
-  const color2 = userColors[1]!;
+  const color1 = userColors[0]!
+  const color2 = userColors[1]!
 
   if (userColors.length === 2) {
-    return { color1, color2 };
+    return { color1, color2 }
   }
 
   // 3+ colors: generate multi-layer chromatic text-shadow
   // e.g. -2px 0px color3, 0px 2px color4, 2px -1px color5
-  const shadowLayers: string[] = [];
-  const extraColors = userColors.slice(2);
+  const shadowLayers: string[] = []
+  const extraColors = userColors.slice(2)
   const offsets = [
     [-2, 1],
     [2, -1],
     [0, 2],
     [-1, -2],
     [1, 2],
-  ];
+  ]
 
   for (let i = 0; i < extraColors.length; i++) {
-    const offset = offsets[i % offsets.length] ?? [1, 1];
-    shadowLayers.push(`${offset[0]}px ${offset[1]}px 0 ${extraColors[i]}`);
+    const offset = offsets[i % offsets.length] ?? [1, 1]
+    shadowLayers.push(`${offset[0]}px ${offset[1]}px 0 ${extraColors[i]}`)
   }
 
   return {
     color1,
     color2,
     textShadow: shadowLayers.join(', '),
-  };
+  }
 }
-

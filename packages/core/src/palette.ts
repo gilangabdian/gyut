@@ -14,26 +14,28 @@ export const PALETTES: readonly (readonly string[])[] = [
   ['#ff0055', '#00f0ff', '#ffe600'],
   // High Voltage
   ['#ff3860', '#ffdd57', '#23d160'],
-] as const;
+] as const
 
 /**
  * Picks 2 distinct contrasting colors from the curated palettes.
  * Uses a deterministic selection based on Math.random for testability.
  */
-export function getRandomGlitchColors(randomFn: () => number = Math.random): [string, string] {
-  const paletteIndex = Math.floor(randomFn() * PALETTES.length) % PALETTES.length;
-  const palette = PALETTES[paletteIndex] ?? PALETTES[0]!;
+export function getRandomGlitchColors(
+  randomFn: () => number = Math.random
+): [string, string] {
+  const paletteIndex =
+    Math.floor(randomFn() * PALETTES.length) % PALETTES.length
+  const palette = PALETTES[paletteIndex] ?? PALETTES[0]!
 
-  const firstIndex = Math.floor(randomFn() * palette.length) % palette.length;
-  let secondIndex = Math.floor(randomFn() * palette.length) % palette.length;
+  const firstIndex = Math.floor(randomFn() * palette.length) % palette.length
+  let secondIndex = Math.floor(randomFn() * palette.length) % palette.length
 
   if (secondIndex === firstIndex) {
-    secondIndex = (firstIndex + 1) % palette.length;
+    secondIndex = (firstIndex + 1) % palette.length
   }
 
-  const col1 = palette[firstIndex] ?? '#00ffff';
-  const col2 = palette[secondIndex] ?? '#ff007f';
+  const col1 = palette[firstIndex] ?? '#00ffff'
+  const col2 = palette[secondIndex] ?? '#ff007f'
 
-  return [col1, col2];
+  return [col1, col2]
 }
-

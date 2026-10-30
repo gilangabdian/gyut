@@ -31,15 +31,32 @@
   },
   "keywords": [
     "glitch",
-    "text",
-    "animation",
-    "rgb",
-    "distortion",
-    "vanilla",
-    "zero-dependency"
+    "text-glitch",
+    "glitch-effect",
+    "animated-text",
+    "text-distortion",
+    "chromatic-aberration",
+    "rgb-split",
+    "typography",
+    "lofi",
+    "cyberpunk",
+    "vanilla-js",
+    "zero-dependency",
+    "typescript"
   ],
-  "author": "Abdian",
+  "author": "Abdian <https://github.com/gilangabdian>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilangabdian/gyut.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gilangabdian/gyut/issues"
+  },
+  "homepage": "https://github.com/gilangabdian/gyut#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "happy-dom": "^21.0.4",
     "tsdown": "^0.23.3",
@@ -47,4 +64,3 @@
     "vitest": "^5.0.5"
   }
 }
-

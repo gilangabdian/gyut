@@ -17,4 +17,3 @@
   },
   "include": ["src", "tests", "tsdown.config.ts", "vitest.config.ts"]
 }
-

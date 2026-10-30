@@ -1,17 +1,17 @@
-'use client';
+'use client'
 
-import { useEffect, useRef } from 'react';
-import { createGlitch } from 'gyut';
+import { useEffect, useRef } from 'react'
+import { createGlitch } from 'gyut'
 
 export function HeroClouds() {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const card1Ref = useRef<HTMLSpanElement>(null);
-  const card2Ref = useRef<HTMLSpanElement>(null);
-  const card3Ref = useRef<HTMLSpanElement>(null);
-  const card4Ref = useRef<HTMLSpanElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const card1Ref = useRef<HTMLSpanElement>(null)
+  const card2Ref = useRef<HTMLSpanElement>(null)
+  const card3Ref = useRef<HTMLSpanElement>(null)
+  const card4Ref = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    const instances: ReturnType<typeof createGlitch>[] = [];
+    const instances: ReturnType<typeof createGlitch>[] = []
 
     // 1. Main Title Glitch: Auto-trigger ('always') with smooth relaxed cadence
     if (titleRef.current) {
@@ -22,7 +22,7 @@ export function HeroClouds() {
           trigger: 'always',
           colors: ['#FF5FCF', '#FFFFFF'],
         })
-      );
+      )
     }
 
     // 2. Simple Floating Visual Cards (Auto-glitching clean words, pure visual like image reference)
@@ -35,7 +35,7 @@ export function HeroClouds() {
           shape: 'classic',
           colors: ['#FF5FCF', '#FFFFFF'],
         })
-      );
+      )
     }
 
     if (card2Ref.current) {
@@ -47,7 +47,7 @@ export function HeroClouds() {
           shape: 'slice',
           colors: ['#FF5FCF', '#FFFFFF'],
         })
-      );
+      )
     }
 
     if (card3Ref.current) {
@@ -59,7 +59,7 @@ export function HeroClouds() {
           shape: 'block',
           colors: ['#FF5FCF', '#FFFFFF'],
         })
-      );
+      )
     }
 
     if (card4Ref.current) {
@@ -71,13 +71,13 @@ export function HeroClouds() {
           shape: 'slice',
           colors: ['#FF5FCF', '#FFFFFF'],
         })
-      );
+      )
     }
 
     return () => {
-      instances.forEach((inst) => inst.destroy());
-    };
-  }, []);
+      instances.forEach((inst) => inst.destroy())
+    }
+  }, [])
 
   return (
     <section className="relative w-full min-h-[85vh] flex flex-col justify-center items-center overflow-hidden bg-[#000000] pt-8 md:pt-12 pb-14 select-none">
@@ -155,5 +155,5 @@ export function HeroClouds() {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,52 +1,54 @@
-'use client';
+'use client'
 
-import { useEffect, useRef, useState } from 'react';
-import { createGlitch } from 'gyut';
-import type { GlitchInstance, GlitchShape, GlitchTrigger } from 'gyut';
+import { useEffect, useRef, useState } from 'react'
+import { createGlitch } from 'gyut'
+import type { GlitchInstance, GlitchShape, GlitchTrigger } from 'gyut'
 
 export function LivePlayground() {
-  const targetRef = useRef<HTMLHeadingElement>(null);
-  const instanceRef = useRef<GlitchInstance | null>(null);
+  const targetRef = useRef<HTMLHeadingElement>(null)
+  const instanceRef = useRef<GlitchInstance | null>(null)
 
   // Playground state
-  const [text, setText] = useState('CYBERNETIC SYSTEM');
-  const [intensity, setIntensity] = useState(0.6);
-  const [speed, setSpeed] = useState(1);
-  const [shape, setShape] = useState<GlitchShape>('classic');
-  const [trigger, setTrigger] = useState<GlitchTrigger>('always');
-  const [colorMode, setColorMode] = useState<'random' | 'custom'>('custom');
-  const [customColors, setCustomColors] = useState('#FF5FCF, #FFFFFF');
-  const [afterGlitchType, setAfterGlitchType] = useState<'none' | 'hide' | 'replace'>('none');
-  const [replaceText, setReplaceText] = useState('SYSTEM RESTORED');
+  const [text, setText] = useState('CYBERNETIC SYSTEM')
+  const [intensity, setIntensity] = useState(0.6)
+  const [speed, setSpeed] = useState(1)
+  const [shape, setShape] = useState<GlitchShape>('classic')
+  const [trigger, setTrigger] = useState<GlitchTrigger>('always')
+  const [colorMode, setColorMode] = useState<'random' | 'custom'>('custom')
+  const [customColors, setCustomColors] = useState('#FF5FCF, #FFFFFF')
+  const [afterGlitchType, setAfterGlitchType] = useState<
+    'none' | 'hide' | 'replace'
+  >('none')
+  const [replaceText, setReplaceText] = useState('SYSTEM RESTORED')
 
   // Initialize or re-initialize glitch instance whenever options change
   useEffect(() => {
-    if (!targetRef.current) return;
+    if (!targetRef.current) return
 
     // Destroy existing instance
     if (instanceRef.current) {
-      instanceRef.current.destroy();
+      instanceRef.current.destroy()
     }
 
     // Set text
-    targetRef.current.textContent = text;
+    targetRef.current.textContent = text
 
     // Parse colors
-    let colors: string[] | undefined;
+    let colors: string[] | undefined
     if (colorMode === 'custom') {
       colors = customColors
         .split(',')
         .map((c) => c.trim())
-        .filter(Boolean);
-      if (colors.length === 0) colors = undefined;
+        .filter(Boolean)
+      if (colors.length === 0) colors = undefined
     }
 
     // Parse afterGlitch
-    let afterGlitch;
+    let afterGlitch
     if (afterGlitchType === 'hide') {
-      afterGlitch = { type: 'hide' as const, mode: 'opacity' as const };
+      afterGlitch = { type: 'hide' as const, mode: 'opacity' as const }
     } else if (afterGlitchType === 'replace') {
-      afterGlitch = { type: 'replace' as const, text: replaceText };
+      afterGlitch = { type: 'replace' as const, text: replaceText }
     }
 
     instanceRef.current = createGlitch(targetRef.current, {
@@ -56,20 +58,41 @@ export function LivePlayground() {
       trigger,
       colors,
       afterGlitch,
-    });
+    })
 
     return () => {
-      instanceRef.current?.destroy();
-    };
-  }, [text, intensity, speed, shape, trigger, colorMode, customColors, afterGlitchType, replaceText]);
+      instanceRef.current?.destroy()
+    }
+  }, [
+    text,
+    intensity,
+    speed,
+    shape,
+    trigger,
+    colorMode,
+    customColors,
+    afterGlitchType,
+    replaceText,
+  ])
+
+  // Auto-loop demo when trigger is 'always' and afterGlitch is active
+  useEffect(() => {
+    if (trigger !== 'always' || afterGlitchType === 'none') return
+
+    const intervalId = setInterval(() => {
+      instanceRef.current?.replay()
+    }, 2800)
+
+    return () => clearInterval(intervalId)
+  }, [trigger, afterGlitchType, text, replaceText, speed])
 
   const handleReplay = () => {
-    instanceRef.current?.replay();
-  };
+    instanceRef.current?.replay()
+  }
 
   const handleStop = () => {
-    instanceRef.current?.stop();
-  };
+    instanceRef.current?.stop()
+  }
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-16">
@@ -89,12 +112,16 @@ export function LivePlayground() {
               <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#FF5FCF]">
                 Settings
               </h3>
-              <span className="text-[11px] font-mono text-[#737373]">v0.1.0</span>
+              <span className="text-[11px] font-mono text-[#737373]">
+                v0.1.0
+              </span>
             </div>
 
             {/* Text Input */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Text Content</label>
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
+                Text Content
+              </label>
               <input
                 type="text"
                 value={text}
@@ -122,7 +149,9 @@ export function LivePlayground() {
 
             {/* Speed Multiplier */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Speed Multiplier</label>
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
+                Speed Multiplier
+              </label>
               <div className="grid grid-cols-3 gap-2">
                 {[0.5, 1, 2].map((s) => (
                   <button
@@ -142,7 +171,9 @@ export function LivePlayground() {
 
             {/* Shape Selector */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Shape Preset</label>
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
+                Shape Preset
+              </label>
               <div className="grid grid-cols-3 gap-2">
                 {(['classic', 'slice', 'block'] as const).map((s) => (
                   <button
@@ -162,7 +193,9 @@ export function LivePlayground() {
 
             {/* Trigger Mode */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Trigger Mode</label>
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
+                Trigger Mode
+              </label>
               <div className="grid grid-cols-3 gap-2">
                 {(['always', 'hover', 'manual'] as const).map((t) => (
                   <button
@@ -183,12 +216,16 @@ export function LivePlayground() {
             {/* Colors Strategy */}
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Colors</label>
+                <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
+                  Colors
+                </label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setColorMode('random')}
                     className={`px-2 py-0.5 text-[11px] font-mono rounded ${
-                      colorMode === 'random' ? 'bg-[#FF5FCF] text-black font-semibold' : 'text-[#737373]'
+                      colorMode === 'random'
+                        ? 'bg-[#FF5FCF] text-black font-semibold'
+                        : 'text-[#737373]'
                     }`}
                   >
                     Random
@@ -196,7 +233,9 @@ export function LivePlayground() {
                   <button
                     onClick={() => setColorMode('custom')}
                     className={`px-2 py-0.5 text-[11px] font-mono rounded ${
-                      colorMode === 'custom' ? 'bg-[#FF5FCF] text-black font-semibold' : 'text-[#737373]'
+                      colorMode === 'custom'
+                        ? 'bg-[#FF5FCF] text-black font-semibold'
+                        : 'text-[#737373]'
                     }`}
                   >
                     Custom
@@ -221,10 +260,16 @@ export function LivePlayground() {
 
             {/* After Glitch Dropdown */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">After Glitch</label>
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
+                After Glitch
+              </label>
               <select
                 value={afterGlitchType}
-                onChange={(e) => setAfterGlitchType(e.target.value as 'none' | 'hide' | 'replace')}
+                onChange={(e) =>
+                  setAfterGlitchType(
+                    e.target.value as 'none' | 'hide' | 'replace'
+                  )
+                }
                 className="w-full bg-[#12121a] border border-white/10 rounded-lg px-3 py-1.5 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
               >
                 <option value="none">None</option>
@@ -268,7 +313,11 @@ export function LivePlayground() {
           <div className="flex items-center justify-between px-2 mb-2 font-mono text-xs text-[#737373]">
             <span className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF5FCF] animate-pulse" />
-              <span>{trigger === 'hover' ? 'Hover over text to trigger glitch' : 'Real-time rendering'}</span>
+              <span>
+                {trigger === 'hover'
+                  ? 'Hover over text to trigger glitch'
+                  : 'Real-time rendering'}
+              </span>
             </span>
             <span>shape: {shape}</span>
           </div>
@@ -279,7 +328,8 @@ export function LivePlayground() {
             <div
               className="absolute inset-0 opacity-10 pointer-events-none"
               style={{
-                backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+                backgroundImage:
+                  'radial-gradient(circle, #ffffff 1px, transparent 1px)',
                 backgroundSize: '24px 24px',
               }}
             />
@@ -299,5 +349,5 @@ export function LivePlayground() {
         </div>
       </div>
     </section>
-  );
+  )
 }
