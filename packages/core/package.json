@@ -32,17 +32,7 @@
   "keywords": [
     "glitch",
     "text-glitch",
-    "glitch-effect",
-    "animated-text",
-    "text-distortion",
-    "chromatic-aberration",
-    "rgb-split",
-    "typography",
-    "lofi",
-    "cyberpunk",
-    "vanilla-js",
-    "zero-dependency",
-    "typescript"
+    "glitch-effect"
   ],
   "author": "Abdian <https://github.com/gilangabdian>",
   "license": "MIT",
