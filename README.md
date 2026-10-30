@@ -27,4 +27,4 @@ bun add gyut
 
 ## License
 
-MIT(./LICENSE)
+[MIT](./LICENSE)
