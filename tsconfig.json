@@ -15,5 +15,10 @@
     "verbatimModuleSyntax": true,
     "moduleDetection": "force"
   },
-  "include": ["src", "tests", "tsdown.config.ts", "vitest.config.ts"]
+  "include": [
+    "packages/core/src",
+    "packages/core/tests",
+    "packages/core/tsdown.config.ts",
+    "packages/core/vitest.config.ts"
+  ]
 }
