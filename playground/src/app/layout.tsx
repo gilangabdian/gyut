@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Fredoka, Space_Mono, Geist } from "next/font/google";
+import { DynaPuff, Space_Mono, Geist } from "next/font/google";
 import "./globals.css";
 
-const fredoka = Fredoka({
+const dynaPuff = DynaPuff({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["600", "700"],
@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fredoka.variable} ${spaceMono.variable} ${geist.variable} h-full antialiased dark`}
+      className={`${dynaPuff.variable} ${spaceMono.variable} ${geist.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-[#000000] text-[#EDEDED] font-sans selection:bg-[#FF5FCF] selection:text-[#000000]">
         {children}

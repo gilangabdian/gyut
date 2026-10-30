@@ -106,7 +106,7 @@ export function DemosShowcase() {
         <div className="flex flex-col justify-between bg-[#0b0b12] border border-white/10 rounded-2xl p-6 shadow-xl hover:border-white/20 transition-all">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <span className="font-mono text-xs text-[#00F0FF] uppercase tracking-wider bg-[#00F0FF]/10 px-2.5 py-1 rounded-md border border-[#00F0FF]/20">
+              <span className="font-mono text-xs text-[#EDEDED]/90 uppercase tracking-wider bg-white/5 px-2.5 py-1 rounded-md border border-white/10">
                 01. Random Mode
               </span>
               <span className="font-mono text-xs text-[#737373]">trigger: &apos;always&apos;</span>
@@ -160,7 +160,7 @@ export function DemosShowcase() {
         <div className="flex flex-col justify-between bg-[#0b0b12] border border-white/10 rounded-2xl p-6 shadow-xl hover:border-white/20 transition-all">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <span className="font-mono text-xs text-[#FFE600] uppercase tracking-wider bg-[#FFE600]/10 px-2.5 py-1 rounded-md border border-[#FFE600]/20">
+              <span className="font-mono text-xs text-[#EDEDED]/90 uppercase tracking-wider bg-white/5 px-2.5 py-1 rounded-md border border-white/10">
                 03. Visual Shapes
               </span>
               <div className="flex gap-1.5">
@@ -170,7 +170,7 @@ export function DemosShowcase() {
                     onClick={() => handleShapeChange(s)}
                     className={`px-2 py-0.5 text-xs font-mono rounded capitalize transition-all ${
                       activeShape === s
-                        ? 'bg-[#FFE600] text-black font-bold'
+                        ? 'bg-[#FF5FCF] text-black font-bold'
                         : 'bg-white/5 text-[#737373] hover:text-[#EDEDED]'
                     }`}
                   >
@@ -201,12 +201,12 @@ export function DemosShowcase() {
         <div className="flex flex-col justify-between bg-[#0b0b12] border border-white/10 rounded-2xl p-6 shadow-xl hover:border-white/20 transition-all">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <span className="font-mono text-xs text-[#00FF66] uppercase tracking-wider bg-[#00FF66]/10 px-2.5 py-1 rounded-md border border-[#00FF66]/20">
+              <span className="font-mono text-xs text-[#FF5FCF] uppercase tracking-wider bg-[#FF5FCF]/10 px-2.5 py-1 rounded-md border border-[#FF5FCF]/20">
                 04. Post-Glitch Action
               </span>
               <button
                 onClick={handleTriggerDemo4}
-                className="px-2.5 py-1 text-xs font-mono rounded-md bg-[#00FF66]/20 text-[#00FF66] hover:bg-[#00FF66] hover:text-black font-semibold transition-all border border-[#00FF66]/30 flex items-center gap-1"
+                className="px-2.5 py-1 text-xs font-mono rounded-md bg-[#FF5FCF] text-black hover:bg-[#FF5FCF]/90 font-bold transition-all flex items-center gap-1 shadow-sm"
               >
                 <span>Trigger Replay</span>
                 <span className="text-[10px]">▶</span>

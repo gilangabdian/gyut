@@ -15,7 +15,7 @@ export function LivePlayground() {
   const [shape, setShape] = useState<GlitchShape>('classic');
   const [trigger, setTrigger] = useState<GlitchTrigger>('always');
   const [colorMode, setColorMode] = useState<'random' | 'custom'>('custom');
-  const [customColors, setCustomColors] = useState('#FF5FCF, #00F0FF, #FFE600');
+  const [customColors, setCustomColors] = useState('#FF5FCF, #FFFFFF');
   const [afterGlitchType, setAfterGlitchType] = useState<'none' | 'hide' | 'replace'>('none');
   const [replaceText, setReplaceText] = useState('SYSTEM RESTORED');
   const [copiedCode, setCopiedCode] = useState(false);
@@ -107,175 +107,179 @@ const glitch = createGlitch('#target', {
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-16">
+      {/* Clean Heading without subtitle */}
       <div className="text-center mb-10">
-        <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#EDEDED] tracking-wide">
+        <h2 className="font-display text-4xl sm:text-5xl font-bold text-[#EDEDED] tracking-wide">
           Playground
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Controls Column (5 cols) */}
-        <div className="lg:col-span-5 bg-[#0c0c14] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-[#FF5FCF]">
-              Configuration Controls
-            </h3>
-            <span className="text-xs font-mono text-[#737373]">v0.1.0</span>
-          </div>
-
-          {/* Text Input */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Text Content</label>
-            <input
-              type="text"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              className="w-full bg-[#141420] border border-white/10 rounded-lg px-3 py-2 font-mono text-sm text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF] transition-all"
-            />
-          </div>
-
-          {/* Intensity Slider */}
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-xs font-mono">
-              <span className="text-[#EDEDED]/80 font-medium">Intensity</span>
-              <span className="text-[#FF5FCF] font-bold">{intensity}</span>
+      {/* Row 1: Side-by-Side Controls (left) & Live Real-Time Preview (right) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* Left: Configuration Controls Panel (5 cols) */}
+        <div className="lg:col-span-5 bg-[#0a0a0f] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col justify-between gap-5">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#FF5FCF]">
+                Settings
+              </h3>
+              <span className="text-[11px] font-mono text-[#737373]">v0.1.0</span>
             </div>
-            <input
-              type="range"
-              min="0.1"
-              max="1.0"
-              step="0.05"
-              value={intensity}
-              onChange={(e) => setIntensity(parseFloat(e.target.value))}
-              className="w-full accent-[#FF5FCF] cursor-pointer"
-            />
-          </div>
 
-          {/* Speed Buttons */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Speed Multiplier</label>
-            <div className="grid grid-cols-3 gap-2">
-              {[0.5, 1, 2].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSpeed(s)}
-                  className={`py-1.5 font-mono text-xs rounded-lg border transition-all ${
-                    speed === s
-                      ? 'bg-[#FF5FCF] text-black font-bold border-[#FF5FCF]'
-                      : 'bg-[#141420] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  {s}x
-                </button>
-              ))}
+            {/* Text Input */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Text Content</label>
+              <input
+                type="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-full bg-[#12121a] border border-white/10 rounded-lg px-3 py-2 font-mono text-sm text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF] transition-all"
+              />
             </div>
-          </div>
 
-          {/* Shape Selector */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Glitch Shape</label>
-            <div className="grid grid-cols-3 gap-2">
-              {(['classic', 'slice', 'block'] as const).map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setShape(s)}
-                  className={`py-1.5 font-mono text-xs capitalize rounded-lg border transition-all ${
-                    shape === s
-                      ? 'bg-[#00F0FF] text-black font-bold border-[#00F0FF]'
-                      : 'bg-[#141420] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+            {/* Intensity Slider */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs font-mono">
+                <span className="text-[#EDEDED]/80 font-medium">Intensity</span>
+                <span className="text-[#FF5FCF] font-bold">{intensity}</span>
+              </div>
+              <input
+                type="range"
+                min="0.1"
+                max="1.0"
+                step="0.05"
+                value={intensity}
+                onChange={(e) => setIntensity(parseFloat(e.target.value))}
+                className="w-full accent-[#FF5FCF] cursor-pointer"
+              />
             </div>
-          </div>
 
-          {/* Trigger Mode */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Trigger Mode</label>
-            <div className="grid grid-cols-3 gap-2">
-              {(['always', 'hover', 'manual'] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTrigger(t)}
-                  className={`py-1.5 font-mono text-xs capitalize rounded-lg border transition-all ${
-                    trigger === t
-                      ? 'bg-[#FFE600] text-black font-bold border-[#FFE600]'
-                      : 'bg-[#141420] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Colors Selection */}
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Color Strategy</label>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setColorMode('random')}
-                  className={`px-2 py-0.5 text-[11px] font-mono rounded ${
-                    colorMode === 'random' ? 'bg-white/20 text-[#EDEDED]' : 'text-[#737373]'
-                  }`}
-                >
-                  Random
-                </button>
-                <button
-                  onClick={() => setColorMode('custom')}
-                  className={`px-2 py-0.5 text-[11px] font-mono rounded ${
-                    colorMode === 'custom' ? 'bg-white/20 text-[#EDEDED]' : 'text-[#737373]'
-                  }`}
-                >
-                  Custom
-                </button>
+            {/* Speed Multiplier */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Speed Multiplier</label>
+              <div className="grid grid-cols-3 gap-2">
+                {[0.5, 1, 2].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSpeed(s)}
+                    className={`py-1.5 font-mono text-xs rounded-lg border transition-all ${
+                      speed === s
+                        ? 'bg-[#FF5FCF] text-black font-bold border-[#FF5FCF]'
+                        : 'bg-[#12121a] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    {s}x
+                  </button>
+                ))}
               </div>
             </div>
 
-            {colorMode === 'custom' ? (
-              <input
-                type="text"
-                value={customColors}
-                onChange={(e) => setCustomColors(e.target.value)}
-                placeholder="#FF5FCF, #00F0FF, #FFE600"
-                className="w-full bg-[#141420] border border-white/10 rounded-lg px-3 py-2 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
-              />
-            ) : (
-              <div className="p-2 bg-[#141420] rounded-lg border border-white/5 text-xs font-mono text-[#737373]">
-                Random vibrant contrast pairs per burst
+            {/* Shape Selector */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Shape Preset</label>
+              <div className="grid grid-cols-3 gap-2">
+                {(['classic', 'slice', 'block'] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setShape(s)}
+                    className={`py-1.5 font-mono text-xs capitalize rounded-lg border transition-all ${
+                      shape === s
+                        ? 'bg-[#FF5FCF] text-black font-bold border-[#FF5FCF]'
+                        : 'bg-[#12121a] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* Trigger Mode */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Trigger Mode</label>
+              <div className="grid grid-cols-3 gap-2">
+                {(['always', 'hover', 'manual'] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTrigger(t)}
+                    className={`py-1.5 font-mono text-xs capitalize rounded-lg border transition-all ${
+                      trigger === t
+                        ? 'bg-[#FF5FCF] text-black font-bold border-[#FF5FCF]'
+                        : 'bg-[#12121a] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Colors Strategy */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Colors</label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setColorMode('random')}
+                    className={`px-2 py-0.5 text-[11px] font-mono rounded ${
+                      colorMode === 'random' ? 'bg-[#FF5FCF] text-black font-semibold' : 'text-[#737373]'
+                    }`}
+                  >
+                    Random
+                  </button>
+                  <button
+                    onClick={() => setColorMode('custom')}
+                    className={`px-2 py-0.5 text-[11px] font-mono rounded ${
+                      colorMode === 'custom' ? 'bg-[#FF5FCF] text-black font-semibold' : 'text-[#737373]'
+                    }`}
+                  >
+                    Custom
+                  </button>
+                </div>
+              </div>
+
+              {colorMode === 'custom' ? (
+                <input
+                  type="text"
+                  value={customColors}
+                  onChange={(e) => setCustomColors(e.target.value)}
+                  placeholder="#FF5FCF, #FFFFFF"
+                  className="w-full bg-[#12121a] border border-white/10 rounded-lg px-3 py-1.5 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
+                />
+              ) : (
+                <div className="p-2 bg-[#12121a] rounded-lg border border-white/5 text-xs font-mono text-[#737373]">
+                  Auto coherent contrast pairs
+                </div>
+              )}
+            </div>
+
+            {/* After Glitch Dropdown */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">After Glitch</label>
+              <select
+                value={afterGlitchType}
+                onChange={(e) => setAfterGlitchType(e.target.value as 'none' | 'hide' | 'replace')}
+                className="w-full bg-[#12121a] border border-white/10 rounded-lg px-3 py-1.5 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
+              >
+                <option value="none">None</option>
+                <option value="hide">Hide Text</option>
+                <option value="replace">Replace Text</option>
+              </select>
+
+              {afterGlitchType === 'replace' && (
+                <input
+                  type="text"
+                  value={replaceText}
+                  onChange={(e) => setReplaceText(e.target.value)}
+                  placeholder="New text"
+                  className="w-full mt-1 bg-[#12121a] border border-white/10 rounded-lg px-3 py-1.5 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
+                />
+              )}
+            </div>
           </div>
 
-          {/* After Glitch Dropdown */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">Post-Glitch Transition</label>
-            <select
-              value={afterGlitchType}
-              onChange={(e) => setAfterGlitchType(e.target.value as 'none' | 'hide' | 'replace')}
-              className="w-full bg-[#141420] border border-white/10 rounded-lg px-3 py-2 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
-            >
-              <option value="none">None (Continuous or Manual)</option>
-              <option value="hide">Hide Text</option>
-              <option value="replace">Replace Text</option>
-            </select>
-
-            {afterGlitchType === 'replace' && (
-              <input
-                type="text"
-                value={replaceText}
-                onChange={(e) => setReplaceText(e.target.value)}
-                placeholder="New text after glitch"
-                className="w-full mt-1 bg-[#141420] border border-white/10 rounded-lg px-3 py-2 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
-              />
-            )}
-          </div>
-
-          {/* Action Trigger Controls */}
-          <div className="pt-2 border-t border-white/10 flex gap-3">
+          {/* Action Trigger Buttons */}
+          <div className="pt-3 border-t border-white/10 flex gap-3">
             <button
               onClick={handleReplay}
               className="flex-1 py-2 rounded-lg bg-[#FF5FCF] text-black font-mono font-bold text-xs hover:bg-[#FF5FCF]/90 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-[#FF5FCF]/20"
@@ -292,13 +296,22 @@ const glitch = createGlitch('#target', {
           </div>
         </div>
 
-        {/* Live Canvas & Generated Code Column (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
-          {/* Live Stage Display */}
-          <div className="w-full min-h-[320px] bg-[#0c0c14] border-2 border-white/10 rounded-2xl flex flex-col items-center justify-center p-8 relative overflow-hidden shadow-2xl">
+        {/* Right: Live Preview Stage (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col justify-between">
+          {/* Status & Hints OUTSIDE the Card */}
+          <div className="flex items-center justify-between px-2 mb-2 font-mono text-xs text-[#737373]">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF5FCF] animate-pulse" />
+              <span>{trigger === 'hover' ? 'Hover over text to trigger glitch' : 'Real-time rendering'}</span>
+            </span>
+            <span>shape: {shape}</span>
+          </div>
+
+          {/* Clean Canvas Display (Card murni hanya menampilkan teks) */}
+          <div className="w-full flex-1 min-h-[380px] bg-[#0a0a0f] border border-white/10 rounded-2xl flex items-center justify-center p-8 relative overflow-hidden shadow-2xl">
             {/* Subtle Canvas Dot Grid Background */}
             <div
-              className="absolute inset-0 opacity-15 pointer-events-none"
+              className="absolute inset-0 opacity-10 pointer-events-none"
               style={{
                 backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
                 backgroundSize: '24px 24px',
@@ -309,38 +322,36 @@ const glitch = createGlitch('#target', {
             <div className="relative z-10 text-center">
               <h3
                 ref={targetRef}
-                className="font-display text-3xl sm:text-5xl md:text-6xl font-bold text-[#EDEDED] tracking-wide select-none cursor-pointer"
+                className={`font-display text-4xl sm:text-5xl md:text-6xl font-bold text-[#EDEDED] tracking-wide select-none ${
+                  trigger === 'hover' ? 'cursor-pointer' : 'cursor-default'
+                }`}
               >
                 {text}
               </h3>
-              <p className="mt-4 font-mono text-xs text-[#737373]">
-                {trigger === 'hover' ? '← Hover over text to trigger glitch →' : 'Real-time rendering'}
-              </p>
             </div>
-          </div>
-
-          {/* Generated TypeScript Code Box */}
-          <div className="w-full bg-[#0c0c14] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
-            <div className="flex items-center justify-between px-4 py-3 bg-[#12121e] border-b border-white/10">
-              <span className="font-mono text-xs text-[#737373]">TypeScript Code Snippet</span>
-              <button
-                onClick={handleCopyCode}
-                className="px-3 py-1 rounded bg-white/10 hover:bg-[#FF5FCF]/20 border border-white/10 text-xs font-mono text-[#EDEDED] transition-all flex items-center gap-1.5"
-              >
-                {copiedCode ? (
-                  <span className="text-[#00FF66]">Copied!</span>
-                ) : (
-                  <span>Copy Code</span>
-                )}
-              </button>
-            </div>
-            <pre className="p-4 overflow-x-auto font-mono text-xs leading-relaxed text-[#EDEDED]/90 bg-[#08080d]">
-              <code>{generatedCode}</code>
-            </pre>
           </div>
         </div>
+      </div>
+
+      {/* Row 2: Underneath Code Snippet (Full Width across bottom) */}
+      <div className="w-full mt-8 bg-[#0a0a0f] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+        <div className="flex items-center justify-between px-5 py-3.5 bg-[#12121a] border-b border-white/10">
+          <span className="font-mono text-xs text-[#EDEDED]/80 font-medium">TypeScript Code Snippet</span>
+          <button
+            onClick={handleCopyCode}
+            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#FF5FCF] hover:text-black border border-white/10 text-xs font-mono text-[#EDEDED] transition-all flex items-center gap-1.5"
+          >
+            {copiedCode ? (
+              <span className="text-[#00FF66] font-bold">Copied!</span>
+            ) : (
+              <span>Copy Code</span>
+            )}
+          </button>
+        </div>
+        <pre className="p-5 overflow-x-auto font-mono text-xs leading-relaxed text-[#EDEDED]/90 bg-[#060609]">
+          <code>{generatedCode}</code>
+        </pre>
       </div>
     </section>
   );
 }
-

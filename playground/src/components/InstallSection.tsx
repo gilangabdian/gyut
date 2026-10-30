@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
+type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
 export function InstallSection() {
-  const [activePm, setActivePm] = useState<PackageManager>('pnpm');
+  const [activePm, setActivePm] = useState<PackageManager>("pnpm");
   const [copied, setCopied] = useState(false);
 
   const commands: Record<PackageManager, string> = {
-    pnpm: 'pnpm add gyut',
-    npm: 'npm install gyut',
-    yarn: 'yarn add gyut',
-    bun: 'bun add gyut',
+    pnpm: "pnpm add gyut",
+    npm: "npm install gyut",
+    yarn: "yarn add gyut",
+    bun: "bun add gyut",
   };
 
   const handleCopy = async () => {
@@ -31,9 +31,6 @@ export function InstallSection() {
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#EDEDED] tracking-wide">
           Get Started in Seconds
         </h2>
-        <p className="mt-2 text-sm sm:text-base font-mono text-[#737373]">
-          Zero dependencies. Zero configuration. Works anywhere JavaScript runs.
-        </p>
       </div>
 
       {/* Terminal Box */}
@@ -41,16 +38,15 @@ export function InstallSection() {
         {/* Header Tabs */}
         <div className="flex items-center justify-between px-4 py-3 bg-[#12121e] border-b border-white/10">
           <div className="flex gap-2">
-            {(['pnpm', 'npm', 'yarn', 'bun'] as const).map((pm) => (
+            {(["pnpm", "npm", "yarn", "bun"] as const).map((pm) => (
               <button
                 key={pm}
                 onClick={() => setActivePm(pm)}
                 className={`px-3 py-1 text-xs font-mono rounded-lg transition-all ${
                   activePm === pm
-                    ? 'bg-[#FF5FCF] text-black font-bold shadow-md'
-                    : 'text-[#737373] hover:text-[#EDEDED] hover:bg-white/5'
-                }`}
-              >
+                    ? "bg-[#FF5FCF] text-black font-bold shadow-md"
+                    : "text-[#737373] hover:text-[#EDEDED] hover:bg-white/5"
+                }`}>
                 {pm}
               </button>
             ))}
@@ -73,8 +69,7 @@ export function InstallSection() {
           <button
             onClick={handleCopy}
             className="ml-4 shrink-0 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-[#FF5FCF]/20 hover:border-[#FF5FCF]/40 border border-white/10 text-xs font-mono text-[#EDEDED] transition-all flex items-center gap-1.5"
-            title="Copy command"
-          >
+            title="Copy command">
             {copied ? (
               <>
                 <svg className="w-4 h-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +80,12 @@ export function InstallSection() {
             ) : (
               <>
                 <svg className="w-4 h-4 text-[#737373]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
                 </svg>
                 <span>Copy</span>
               </>
@@ -96,4 +96,3 @@ export function InstallSection() {
     </section>
   );
 }
-
