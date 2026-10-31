@@ -19,7 +19,7 @@ describe('styleRegistry', () => {
     expect(tag).not.toBeNull()
     expect(tag?.tagName.toLowerCase()).toBe('style')
     expect(tag?.textContent).toContain('.gyut-target')
-    expect(tag?.textContent).toContain('gyut-anim-classic-1')
+    expect(tag?.textContent).toContain('gyut-c1')
   })
 
   it('reuses the same style tag across multiple instances and does not duplicate', () => {

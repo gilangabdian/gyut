@@ -31,9 +31,9 @@ export class GlitchController implements GlitchInstance {
   private options: NormalizedGlitchOptions
   private originalState: OriginalElementState
   private _isGlitching = false
-  private burstTimeoutId: ReturnType<typeof setTimeout> | null = null
-  private idleTimeoutId: ReturnType<typeof setTimeout> | null = null
-  private transitionTimeoutId: ReturnType<typeof setTimeout> | null = null
+  private burstTimer?: any
+  private idleTimer?: any
+  private transTimer?: any
   private abortController = new AbortController()
   private reducedMotion = false
 
@@ -62,19 +62,12 @@ export class GlitchController implements GlitchInstance {
 
     this.element = el
 
-    // Validate and normalize options
-    const intensity = Math.min(Math.max(options.intensity ?? 0.5, 0.1), 1.0)
-    const speed = Math.max(options.speed ?? 1, 0.1)
-    const trigger: GlitchTrigger = options.trigger ?? 'always'
-    const shape: GlitchShape = options.shape ?? 'classic'
-    const respectReducedMotion = options.respectReducedMotion ?? true
-
     this.options = {
-      intensity,
-      speed,
-      trigger,
-      shape,
-      respectReducedMotion,
+      intensity: Math.min(Math.max(options.intensity ?? 0.5, 0.1), 1),
+      speed: Math.max(options.speed ?? 1, 0.1),
+      trigger: options.trigger ?? 'always',
+      shape: options.shape ?? 'classic',
+      respectReducedMotion: options.respectReducedMotion ?? true,
       colors: options.colors,
       afterGlitch: options.afterGlitch,
     }
@@ -125,16 +118,15 @@ export class GlitchController implements GlitchInstance {
   private initElement(): void {
     styleRegistry.retain()
 
-    this.element.classList.add('gyut-target')
-    this.element.classList.add(`gyut-shape-${this.options.shape}`)
+    this.element.classList.add(
+      'gyut-target',
+      `gyut-shape-${this.options.shape}`
+    )
     this.element.setAttribute('data-gyut-text', this.originalState.text)
 
-    // Apply baseline CSS variables
-    this.element.style.setProperty(
-      '--gyut-intensity',
-      String(this.options.intensity)
-    )
-    this.element.style.setProperty(
+    const s = this.element.style
+    s.setProperty('--gyut-intensity', String(this.options.intensity))
+    s.setProperty(
       '--gyut-anim-duration',
       `${(0.2 / this.options.speed).toFixed(3)}s`
     )
@@ -150,7 +142,6 @@ export class GlitchController implements GlitchInstance {
     if (this._isGlitching) return
 
     if (this.reducedMotion) {
-      // If motion is reduced and afterGlitch is requested, execute immediate fallback
       if (this.options.afterGlitch) {
         this.executeAfterGlitch()
       }
@@ -170,7 +161,6 @@ export class GlitchController implements GlitchInstance {
   replay(): void {
     this.stop()
 
-    // Reset post-glitch modifications
     this.element.classList.remove(
       'gyut--hidden',
       'gyut--visibility-hidden',
@@ -187,10 +177,7 @@ export class GlitchController implements GlitchInstance {
     this.clearTimers()
     this.abortController.abort()
 
-    // Restore original text
     this.element.textContent = this.originalState.text
-
-    // Remove added attributes & classes
     this.element.removeAttribute('data-gyut-text')
     this.element.classList.remove(
       'gyut-target',
@@ -201,21 +188,18 @@ export class GlitchController implements GlitchInstance {
       `gyut-shape-${this.options.shape}`
     )
 
-    // Restore inline styles
     if (this.originalState.style !== null) {
       this.element.setAttribute('style', this.originalState.style)
     } else {
       this.element.removeAttribute('style')
     }
 
-    // Restore aria-label if present
     if (this.originalState.ariaLabel !== null) {
       this.element.setAttribute('aria-label', this.originalState.ariaLabel)
     } else {
       this.element.removeAttribute('aria-label')
     }
 
-    // Release singleton style tag
     styleRegistry.release()
     activeInstances.delete(this.element)
   }
@@ -223,24 +207,21 @@ export class GlitchController implements GlitchInstance {
   private scheduleBurst(): void {
     if (!this._isGlitching) return
 
-    // Apply color choices at burst onset
     const resolved = resolveGlitchColors(this.options.colors)
-    this.element.style.setProperty('--gyut-color-1', resolved.color1)
-    this.element.style.setProperty('--gyut-color-2', resolved.color2)
+    const s = this.element.style
+    s.setProperty('--gyut-color-1', resolved.color1)
+    s.setProperty('--gyut-color-2', resolved.color2)
 
     if (resolved.textShadow) {
-      this.element.style.setProperty('--gyut-shadow', resolved.textShadow)
+      s.setProperty('--gyut-shadow', resolved.textShadow)
     } else {
-      this.element.style.removeProperty('--gyut-shadow')
+      s.removeProperty('--gyut-shadow')
     }
 
-    // Activate visual glitch
     this.element.classList.add('gyut--active')
-
-    // Burst lasts between 180ms to 320ms, scaled by speed
     const burstDuration = Math.round(220 / this.options.speed)
 
-    this.burstTimeoutId = setTimeout(() => {
+    this.burstTimer = setTimeout(() => {
       this.element.classList.remove('gyut--active')
 
       if (this.options.afterGlitch) {
@@ -258,11 +239,10 @@ export class GlitchController implements GlitchInstance {
         return
       }
 
-      // Idle pause before next burst: 800ms - 2200ms scaled by speed
       const idleInterval = Math.round(
         (900 + Math.random() * 1200) / this.options.speed
       )
-      this.idleTimeoutId = setTimeout(() => {
+      this.idleTimer = setTimeout(() => {
         this.scheduleBurst()
       }, idleInterval)
     }, burstDuration)
@@ -273,17 +253,15 @@ export class GlitchController implements GlitchInstance {
     if (!after) return
 
     if (after.type === 'hide') {
-      if (after.mode === 'visibility') {
-        this.element.classList.add('gyut--visibility-hidden')
-      } else {
-        this.element.classList.add('gyut--hidden')
-      }
+      this.element.classList.add(
+        after.mode === 'visibility' ? 'gyut--visibility-hidden' : 'gyut--hidden'
+      )
       return
     }
 
     if (after.type === 'replace') {
       this.element.classList.add('gyut--replacing')
-      this.transitionTimeoutId = setTimeout(() => {
+      this.transTimer = setTimeout(() => {
         this.element.textContent = after.text
         this.element.setAttribute('data-gyut-text', after.text)
         this.element.classList.remove('gyut--replacing')
@@ -292,10 +270,10 @@ export class GlitchController implements GlitchInstance {
   }
 
   private clearTimers(): void {
-    clearTimeout(this.burstTimeoutId!)
-    clearTimeout(this.idleTimeoutId!)
-    clearTimeout(this.transitionTimeoutId!)
-    this.burstTimeoutId = this.idleTimeoutId = this.transitionTimeoutId = null
+    clearTimeout(this.burstTimer)
+    clearTimeout(this.idleTimer)
+    clearTimeout(this.transTimer)
+    this.burstTimer = this.idleTimer = this.transTimer = undefined
   }
 }
 

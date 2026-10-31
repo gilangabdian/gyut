@@ -15,10 +15,8 @@ export function isValidColorString(color: unknown): color is string {
   if (!trimmed) return false
   // Accepts hex, rgb, rgba, hsl, hsla, or standard named css colors
   return (
-    /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(
-      trimmed
-    ) ||
-    /^(rgb|rgba|hsl|hsla)\(/.test(trimmed) ||
+    /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(trimmed) ||
+    /^(rgb|hsl)a?\(/.test(trimmed) ||
     /^[a-zA-Z]+$/.test(trimmed)
   )
 }
