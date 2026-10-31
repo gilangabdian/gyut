@@ -3,5 +3,6 @@ packages:
   - 'playground'
 
 allowBuilds:
+  esbuild: true
   sharp: false
   unrs-resolver: false
