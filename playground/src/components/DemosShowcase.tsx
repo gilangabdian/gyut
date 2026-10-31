@@ -48,11 +48,14 @@ export function DemosShowcase() {
       })
     }
 
-    // 4. Post-Glitch Replace Demo
+    // 4. Post-Glitch Replace Demo with auto-looping showcase cycle
+    let demo4Timer: NodeJS.Timeout
+    let demo4Active = true
+
     if (demo4Ref.current) {
       demo4InstanceRef.current = createGlitch(demo4Ref.current, {
         intensity: 0.7,
-        speed: 1.2,
+        speed: 0.9,
         trigger: 'manual',
         shape: 'block',
         colors: ['#FF5FCF', '#00FF66'],
@@ -61,9 +64,32 @@ export function DemosShowcase() {
           text: 'SYSTEM RESTORED',
         },
       })
+
+      const runDemo4Loop = () => {
+        if (!demo4Active) return
+
+        if (demo4Ref.current) {
+          demo4Ref.current.innerHTML = `<span class="gyut-base">BREACH DETECTED</span>`
+          demo4Ref.current.setAttribute('data-gyut-text', 'BREACH DETECTED')
+        }
+
+        demo4Timer = setTimeout(() => {
+          if (!demo4Active) return
+          demo4InstanceRef.current?.replay()
+
+          demo4Timer = setTimeout(() => {
+            if (!demo4Active) return
+            runDemo4Loop()
+          }, 2400)
+        }, 1800)
+      }
+
+      runDemo4Loop()
     }
 
     return () => {
+      demo4Active = false
+      clearTimeout(demo4Timer)
       g1?.destroy()
       g2?.destroy()
       demo3InstanceRef.current?.destroy()
@@ -87,6 +113,10 @@ export function DemosShowcase() {
   }
 
   const handleTriggerDemo4 = () => {
+    if (demo4Ref.current) {
+      demo4Ref.current.innerHTML = `<span class="gyut-base">BREACH DETECTED</span>`
+      demo4Ref.current.setAttribute('data-gyut-text', 'BREACH DETECTED')
+    }
     demo4InstanceRef.current?.replay()
   }
 

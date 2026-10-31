@@ -1,7 +1,9 @@
 import type {
   GlitchAfter,
+  GlitchAfterReplace,
   GlitchInstance,
   GlitchOptions,
+  GlitchPreset,
   GlitchShape,
   GlitchTrigger,
 } from './types.js'
@@ -21,6 +23,7 @@ interface NormalizedGlitchOptions {
   speed: number
   trigger: GlitchTrigger
   shape: GlitchShape
+  preset: GlitchPreset
   respectReducedMotion: boolean
   colors?: string[] | undefined
   afterGlitch?: GlitchAfter | undefined
@@ -67,6 +70,7 @@ export class GlitchController implements GlitchInstance {
       speed: Math.max(options.speed ?? 1, 0.1),
       trigger: options.trigger ?? 'always',
       shape: options.shape ?? 'classic',
+      preset: options.preset ?? 'default',
       respectReducedMotion: options.respectReducedMotion ?? true,
       colors: options.colors,
       afterGlitch: options.afterGlitch,
@@ -74,7 +78,7 @@ export class GlitchController implements GlitchInstance {
 
     // Store original state for pristine restoration upon destroy()
     this.originalState = {
-      text: this.element.textContent ?? '',
+      text: (this.element.textContent ?? '').trim(),
       style: this.element.getAttribute('style'),
       ariaLabel: this.element.getAttribute('aria-label'),
     }
@@ -115,6 +119,50 @@ export class GlitchController implements GlitchInstance {
     return this._isGlitching
   }
 
+  private getPresetConfig(): {
+    timing: string
+    animDuration: number
+    baseBurst: number
+    minIdle: number
+    maxIdleVariance: number
+  } {
+    switch (this.options.preset) {
+      case 'smooth':
+        return {
+          timing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          animDuration: 0.75,
+          baseBurst: 850,
+          minIdle: 900,
+          maxIdleVariance: 1200,
+        }
+      case 'lag':
+        return {
+          timing: 'steps(2, jump-none)',
+          animDuration: 0.5,
+          baseBurst: 550,
+          minIdle: 1200,
+          maxIdleVariance: 1400,
+        }
+      case 'long':
+        return {
+          timing: 'steps(3, jump-none)',
+          animDuration: 0.22,
+          baseBurst: 2200,
+          minIdle: 800,
+          maxIdleVariance: 1000,
+        }
+      case 'default':
+      default:
+        return {
+          timing: 'steps(3, jump-none)',
+          animDuration: 0.18,
+          baseBurst: 220,
+          minIdle: 900,
+          maxIdleVariance: 1200,
+        }
+    }
+  }
+
   private initElement(): void {
     styleRegistry.retain()
 
@@ -123,13 +171,16 @@ export class GlitchController implements GlitchInstance {
       `gyut-shape-${this.options.shape}`
     )
     this.element.setAttribute('data-gyut-text', this.originalState.text)
+    this.element.innerHTML = `<span class="gyut-base">${this.originalState.text}</span>`
 
+    const cfg = this.getPresetConfig()
     const s = this.element.style
     s.setProperty('--gyut-intensity', String(this.options.intensity))
     s.setProperty(
       '--gyut-anim-duration',
-      `${(0.2 / this.options.speed).toFixed(3)}s`
+      `${(cfg.animDuration / this.options.speed).toFixed(3)}s`
     )
+    s.setProperty('--gyut-timing', cfg.timing)
   }
 
   private setupHoverTrigger(): void {
@@ -166,7 +217,7 @@ export class GlitchController implements GlitchInstance {
       'gyut--visibility-hidden',
       'gyut--replacing'
     )
-    this.element.textContent = this.originalState.text
+    this.element.innerHTML = `<span class="gyut-base">${this.originalState.text}</span>`
     this.element.setAttribute('data-gyut-text', this.originalState.text)
 
     this.start()
@@ -219,14 +270,31 @@ export class GlitchController implements GlitchInstance {
     }
 
     this.element.classList.add('gyut--active')
-    const burstDuration = Math.round(220 / this.options.speed)
+
+    const cfg = this.getPresetConfig()
+    const burstDuration = Math.round(cfg.baseBurst / this.options.speed)
+
+    // In-Glitch Morphing: swap text inside active burst before it resolves
+    if (this.options.afterGlitch?.type === 'replace') {
+      const morphLeadTime = Math.min(90, Math.round(burstDuration * 0.4))
+      const swapDelay = Math.max(10, burstDuration - morphLeadTime)
+
+      this.transTimer = setTimeout(() => {
+        if (!this._isGlitching) return
+        const after = this.options.afterGlitch as GlitchAfterReplace
+        this.element.innerHTML = `<span class="gyut-base">${after.text}</span>`
+        this.element.setAttribute('data-gyut-text', after.text)
+      }, swapDelay)
+    }
 
     this.burstTimer = setTimeout(() => {
       this.element.classList.remove('gyut--active')
 
       if (this.options.afterGlitch) {
         this._isGlitching = false
-        this.executeAfterGlitch()
+        if (this.options.afterGlitch.type === 'hide') {
+          this.executeAfterGlitch()
+        }
         return
       }
 
@@ -240,7 +308,7 @@ export class GlitchController implements GlitchInstance {
       }
 
       const idleInterval = Math.round(
-        (900 + Math.random() * 1200) / this.options.speed
+        (cfg.minIdle + Math.random() * cfg.maxIdleVariance) / this.options.speed
       )
       this.idleTimer = setTimeout(() => {
         this.scheduleBurst()
@@ -260,12 +328,8 @@ export class GlitchController implements GlitchInstance {
     }
 
     if (after.type === 'replace') {
-      this.element.classList.add('gyut--replacing')
-      this.transTimer = setTimeout(() => {
-        this.element.textContent = after.text
-        this.element.setAttribute('data-gyut-text', after.text)
-        this.element.classList.remove('gyut--replacing')
-      }, 120)
+      this.element.innerHTML = `<span class="gyut-base">${after.text}</span>`
+      this.element.setAttribute('data-gyut-text', after.text)
     }
   }
 

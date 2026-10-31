@@ -138,6 +138,7 @@ import { createGlitch } from 'gyuttt'
 const glitch = createGlitch('#hero-title', {
   trigger: 'once', // Runs 1 burst on load/refresh, then stops
   shape: 'slice', // Razor-thin horizontal ribbons
+  preset: 'smooth', // Fluid analog wave distortion
   intensity: 0.8, // Strong visual tearing
   speed: 1.2, // Snappy animation cadence
   colors: ['#FF5FCF', '#00F0FF', '#FFFFFF'], // Custom multi-layer palette
@@ -145,6 +146,33 @@ const glitch = createGlitch('#hero-title', {
     type: 'replace',
     text: 'WELCOME TO GYUT', // Final text displayed after glitch
   },
+})
+```
+
+### Motion Presets
+
+GYUTTT provides 4 distinct motion presets to control easing and timing feel, which can be accelerated or decelerated with `speed`:
+
+- **`'default'`**: Crisp, stepped digital jitter with rhythmic bursts.
+- **`'smooth'`**: Fluid, analog wave distortion using cubic-bezier curves (no harsh stepped cuts).
+- **`'lag'`**: Stuttering, low-framerate drop-frame glitch (simulating GPU lag or signal drops).
+- **`'long'`**: Sustained glitch burst lasting ~2200ms before returning to idle.
+
+```ts
+// Smooth analog distortion
+createGlitch('#analog-text', {
+  preset: 'smooth',
+  speed: 1.5,
+})
+
+// Frame-drop stutter lag
+createGlitch('#lag-text', {
+  preset: 'lag',
+})
+
+// Sustained long glitch
+createGlitch('#alert-text', {
+  preset: 'long',
 })
 ```
 
@@ -161,6 +189,7 @@ const glitch = createGlitch('#hero-title', {
 | `intensity`            | `number`                                                                                  | `0.5`             | Glitch displacement and jitter magnitude (`0.1` subtle to `1.0` intense).                                                             |
 | `speed`                | `number`                                                                                  | `1`               | Speed multiplier for burst cadence and jitter frequency.                                                                              |
 | `shape`                | `'classic' \| 'slice' \| 'block'`                                                         | `'classic'`       | Visual glitch preset (`classic`: RGB shift, `slice`: razor-thin ribbons, `block`: 2D pixel tiles).                                    |
+| `preset`               | `'default' \| 'smooth' \| 'lag' \| 'long'`                                                | `'default'`       | Motion and cadence preset (`default`: stepped digital, `smooth`: analog wave, `lag`: drop-frame stutter, `long`: sustained burst).    |
 | `trigger`              | `'always' \| 'once' \| 'hover' \| 'manual'`                                               | `'always'`        | When to glitch (`always`: continuous intervals, `once`: single burst on load/init, `hover`: on pointer hover, `manual`: via methods). |
 | `afterGlitch`          | `{ type: 'hide', mode?: 'opacity' \| 'visibility' } \| { type: 'replace', text: string }` | `undefined`       | Action after glitch completes: hide element or replace text.                                                                          |
 | `respectReducedMotion` | `boolean`                                                                                 | `true`            | Automatically disables animations when OS `prefers-reduced-motion` is enabled.                                                        |

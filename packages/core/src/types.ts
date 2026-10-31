@@ -1,5 +1,6 @@
 export type GlitchTrigger = 'always' | 'hover' | 'manual' | 'once'
 export type GlitchShape = 'classic' | 'slice' | 'block'
+export type GlitchPreset = 'default' | 'smooth' | 'lag' | 'long'
 
 export interface GlitchAfterHide {
   type: 'hide'
@@ -48,6 +49,17 @@ export interface GlitchOptions {
    * Default: 'always'
    */
   trigger?: GlitchTrigger | undefined
+
+  /**
+   * Motion and cadence preset.
+   * - 'default': Crisp digital frame jumps (steps easing, ~220ms burst).
+   * - 'smooth': Fluid, analog wave distortion (cubic-bezier easing).
+   * - 'lag': Low-framerate, stuttering frame drops (steps(1, start)).
+   * - 'long': Sustained glitch burst (~2200ms) lingering on screen.
+   * Combine with `speed` multiplier to accelerate or decelerate any preset.
+   * Default: 'default'
+   */
+  preset?: GlitchPreset | undefined
 
   /**
    * Visual preset shape.

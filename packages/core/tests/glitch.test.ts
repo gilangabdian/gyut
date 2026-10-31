@@ -324,4 +324,99 @@ describe('createGlitch lifecycle and DOM behavior', () => {
 
     glitch.destroy()
   })
+
+  it('supports motion presets (default, smooth, lag, long) and sets --gyut-timing accordingly', () => {
+    const elSmooth = document.createElement('div')
+    const elLag = document.createElement('div')
+    const elLong = document.createElement('div')
+    const elDefault = document.createElement('div')
+    container.append(elSmooth, elLag, elLong, elDefault)
+
+    const gSmooth = createGlitch(elSmooth, {
+      preset: 'smooth',
+      trigger: 'manual',
+    })
+    const gLag = createGlitch(elLag, { preset: 'lag', trigger: 'manual' })
+    const gLong = createGlitch(elLong, { preset: 'long', trigger: 'manual' })
+    const gDefault = createGlitch(elDefault, {
+      preset: 'default',
+      trigger: 'manual',
+    })
+
+    expect(elSmooth.style.getPropertyValue('--gyut-timing')).toBe(
+      'cubic-bezier(0.4, 0, 0.2, 1)'
+    )
+    expect(elLag.style.getPropertyValue('--gyut-timing')).toBe(
+      'steps(2, jump-none)'
+    )
+    expect(elLong.style.getPropertyValue('--gyut-timing')).toBe(
+      'steps(3, jump-none)'
+    )
+    expect(elDefault.style.getPropertyValue('--gyut-timing')).toBe(
+      'steps(3, jump-none)'
+    )
+
+    gSmooth.destroy()
+    gLag.destroy()
+    gLong.destroy()
+    gDefault.destroy()
+  })
+
+  it('sustains long preset burst for ~2200ms and scales with speed multiplier', () => {
+    const el = document.createElement('h2')
+    el.textContent = 'LONG PRESET'
+    container.appendChild(el)
+
+    // Long preset with 1x speed -> burst ~2200ms
+    const glitch = createGlitch(el, { trigger: 'once', preset: 'long' })
+    expect(glitch.isGlitching).toBe(true)
+    expect(el.classList.contains('gyut--active')).toBe(true)
+
+    // After 1500ms, long glitch should STILL be active
+    vi.advanceTimersByTime(1500)
+    expect(el.classList.contains('gyut--active')).toBe(true)
+    expect(glitch.isGlitching).toBe(true)
+
+    // After reaching 2300ms, burst should be completed
+    vi.advanceTimersByTime(800)
+    expect(el.classList.contains('gyut--active')).toBe(false)
+    expect(glitch.isGlitching).toBe(false)
+
+    glitch.destroy()
+
+    // Now test long preset combined with speed: 2 -> burst ~1100ms
+    const el2 = document.createElement('h2')
+    el2.textContent = 'FAST LONG PRESET'
+    container.appendChild(el2)
+
+    const glitch2 = createGlitch(el2, {
+      trigger: 'once',
+      preset: 'long',
+      speed: 2,
+    })
+    expect(el2.classList.contains('gyut--active')).toBe(true)
+
+    vi.advanceTimersByTime(800)
+    expect(el2.classList.contains('gyut--active')).toBe(true)
+
+    vi.advanceTimersByTime(350) // total 1150ms
+    expect(el2.classList.contains('gyut--active')).toBe(false)
+
+    glitch2.destroy()
+  })
+
+  it('wraps base text in .gyut-base for deep fracturing and restores plain text upon destroy', () => {
+    const el = document.createElement('h3')
+    el.textContent = 'SHATTERED BASE TEXT'
+    container.appendChild(el)
+
+    const glitch = createGlitch(el, { trigger: 'manual' })
+    const baseSpan = el.querySelector('.gyut-base')
+    expect(baseSpan).not.toBeNull()
+    expect(baseSpan?.textContent).toBe('SHATTERED BASE TEXT')
+
+    glitch.destroy()
+    expect(el.querySelector('.gyut-base')).toBeNull()
+    expect(el.textContent).toBe('SHATTERED BASE TEXT')
+  })
 })

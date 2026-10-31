@@ -20,6 +20,8 @@ describe('styleRegistry', () => {
     expect(tag?.tagName.toLowerCase()).toBe('style')
     expect(tag?.textContent).toContain('.gyut-target')
     expect(tag?.textContent).toContain('gyut-c1')
+    expect(tag?.textContent).toContain('gyut-base')
+    expect(tag?.textContent).toContain('.gyut-target.gyut--active')
   })
 
   it('reuses the same style tag across multiple instances and does not duplicate', () => {

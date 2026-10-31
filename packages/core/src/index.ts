@@ -7,6 +7,7 @@ export type {
   GlitchOptions,
   GlitchTrigger,
   GlitchShape,
+  GlitchPreset,
   GlitchAfter,
   GlitchAfterHide,
   GlitchAfterReplace,
