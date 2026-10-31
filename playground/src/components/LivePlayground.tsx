@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createGlitch } from 'gyut'
-import type { GlitchInstance, GlitchShape, GlitchTrigger } from 'gyut'
+import { createGlitch } from 'gyuttt'
+import type { GlitchInstance, GlitchShape, GlitchTrigger } from 'gyuttt'
 
 export function LivePlayground() {
   const targetRef = useRef<HTMLHeadingElement>(null)

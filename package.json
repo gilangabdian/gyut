@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter playground dev",
-    "build": "pnpm --filter gyut build",
+    "build": "pnpm --filter gyuttt build",
     "build:playground": "pnpm --filter playground build",
-    "test": "pnpm --filter gyut test",
+    "test": "pnpm --filter gyuttt test",
     "typecheck": "pnpm -r typecheck",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

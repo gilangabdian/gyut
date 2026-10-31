@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createGlitch } from 'gyut'
-import type { GlitchShape } from 'gyut'
+import { createGlitch } from 'gyuttt'
+import type { GlitchShape } from 'gyuttt'
 
 export function DemosShowcase() {
   const demo1Ref = useRef<HTMLDivElement>(null)

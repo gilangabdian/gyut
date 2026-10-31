@@ -224,7 +224,7 @@ importers:
 
   playground:
     dependencies:
-      gyut:
+      gyuttt:
         specifier: workspace:*
         version: link:../packages/core
       next:

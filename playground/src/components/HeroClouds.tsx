@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { createGlitch } from 'gyut'
+import { createGlitch } from 'gyuttt'
 
 export function HeroClouds() {
   const titleRef = useRef<HTMLHeadingElement>(null)
