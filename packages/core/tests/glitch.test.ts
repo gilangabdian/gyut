@@ -264,4 +264,64 @@ describe('createGlitch lifecycle and DOM behavior', () => {
 
     glitch.destroy()
   })
+
+  it("supports 'once' trigger mode running a single burst and stopping", () => {
+    const el = document.createElement('h1')
+    el.textContent = 'ONCE TEST'
+    container.appendChild(el)
+
+    const glitch = createGlitch(el, { trigger: 'once' })
+    // Runs immediately on init
+    expect(glitch.isGlitching).toBe(true)
+    expect(el.classList.contains('gyut--active')).toBe(true)
+
+    // Advance past burst duration (~220ms)
+    vi.advanceTimersByTime(250)
+
+    // Burst ends, active class removed, and isGlitching is false
+    expect(el.classList.contains('gyut--active')).toBe(false)
+    expect(glitch.isGlitching).toBe(false)
+
+    // Advance idle time (further 2000ms) - should NOT start another burst
+    vi.advanceTimersByTime(2000)
+    expect(el.classList.contains('gyut--active')).toBe(false)
+    expect(glitch.isGlitching).toBe(false)
+
+    // Replay should run a single burst again
+    glitch.replay()
+    expect(glitch.isGlitching).toBe(true)
+    expect(el.classList.contains('gyut--active')).toBe(true)
+
+    vi.advanceTimersByTime(250)
+    expect(el.classList.contains('gyut--active')).toBe(false)
+    expect(glitch.isGlitching).toBe(false)
+
+    glitch.destroy()
+  })
+
+  it("supports 'once' trigger combined with afterGlitch replacement", () => {
+    const el = document.createElement('h1')
+    el.textContent = 'BEFORE GLITCH'
+    container.appendChild(el)
+
+    const glitch = createGlitch(el, {
+      trigger: 'once',
+      afterGlitch: { type: 'replace', text: 'AFTER GLITCH' },
+    })
+
+    expect(glitch.isGlitching).toBe(true)
+    expect(el.classList.contains('gyut--active')).toBe(true)
+
+    // Burst completes (220ms) and replacement transition resolves (120ms) -> 340ms total
+    vi.advanceTimersByTime(400)
+    expect(el.textContent).toBe('AFTER GLITCH')
+    expect(glitch.isGlitching).toBe(false)
+
+    // Should remain stopped in post-glitch state
+    vi.advanceTimersByTime(3000)
+    expect(el.textContent).toBe('AFTER GLITCH')
+    expect(glitch.isGlitching).toBe(false)
+
+    glitch.destroy()
+  })
 })

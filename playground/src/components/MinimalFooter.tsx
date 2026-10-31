@@ -2,21 +2,38 @@
 
 import { useEffect, useState } from 'react'
 
-const BUILD_MILESTONES = [
-  'build 2 hours ago',
-  'build 4 days ago',
-  'build 2 weeks ago',
-  'build 1 month ago',
-  'build 1 year ago',
-]
+// Timestamp of the first commit in the repository (29 Oct 2026 06:44:47 +0700)
+const PROJECT_INCEPTION = 1793231087000
+
+function getProjectAge(): string {
+  const diffMs = Math.max(0, Date.now() - PROJECT_INCEPTION)
+  const seconds = Math.floor(diffMs / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  const days = Math.floor(hours / 24)
+  const weeks = Math.floor(days / 7)
+  const months = Math.floor(days / 30)
+  const years = Math.floor(days / 365)
+
+  if (years > 0) return `build ${years} ${years === 1 ? 'year' : 'years'} ago`
+  if (months > 0)
+    return `build ${months} ${months === 1 ? 'month' : 'months'} ago`
+  if (weeks > 0) return `build ${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`
+  if (days > 0) return `build ${days} ${days === 1 ? 'day' : 'days'} ago`
+  if (hours > 0) return `build ${hours} ${hours === 1 ? 'hour' : 'hours'} ago`
+  if (minutes > 0)
+    return `build ${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`
+  return 'build just now'
+}
 
 export function MinimalFooter() {
-  const [index, setIndex] = useState(0)
+  const [projectAge, setProjectAge] = useState<string>('build recently')
 
   useEffect(() => {
+    setProjectAge(getProjectAge())
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % BUILD_MILESTONES.length)
-    }, 4000)
+      setProjectAge(getProjectAge())
+    }, 60000)
     return () => clearInterval(interval)
   }, [])
 
@@ -37,10 +54,10 @@ export function MinimalFooter() {
           <span className="text-[#737373]">MIT</span>
         </div>
 
-        {/* Right: Pure text build time (dynamic rotating relative milestone) */}
+        {/* Right: Pure text build time (dynamically computed from inception) */}
         <div>
           <span className="font-mono text-xs text-[#737373] transition-all duration-300">
-            {BUILD_MILESTONES[index]}
+            {projectAge}
           </span>
         </div>
       </div>

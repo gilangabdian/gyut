@@ -1,4 +1,4 @@
-export type GlitchTrigger = 'always' | 'hover' | 'manual'
+export type GlitchTrigger = 'always' | 'hover' | 'manual' | 'once'
 export type GlitchShape = 'classic' | 'slice' | 'block'
 
 export interface GlitchAfterHide {
@@ -42,6 +42,7 @@ export interface GlitchOptions {
   /**
    * Trigger mode for animation.
    * - 'always': continuous bursts at intervals.
+   * - 'once': fires single burst on load/init and stops.
    * - 'hover': runs while pointer is hovering over element.
    * - 'manual': only runs when start() or replay() is called.
    * Default: 'always'

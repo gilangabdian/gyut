@@ -196,8 +196,8 @@ export function LivePlayground() {
               <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
                 Trigger Mode
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {(['always', 'hover', 'manual'] as const).map((t) => (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {(['always', 'once', 'hover', 'manual'] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setTrigger(t)}
@@ -316,7 +316,11 @@ export function LivePlayground() {
               <span>
                 {trigger === 'hover'
                   ? 'Hover over text to trigger glitch'
-                  : 'Real-time rendering'}
+                  : trigger === 'once'
+                    ? 'Fired once on mount (click Replay to re-trigger)'
+                    : trigger === 'manual'
+                      ? 'Manual mode (click Replay to trigger)'
+                      : 'Real-time rendering'}
               </span>
             </span>
             <span>shape: {shape}</span>
@@ -338,9 +342,7 @@ export function LivePlayground() {
             <div className="relative z-10 text-center">
               <h3
                 ref={targetRef}
-                className={`font-display text-4xl sm:text-5xl md:text-6xl font-bold text-[#EDEDED] tracking-wide select-none ${
-                  trigger === 'hover' ? 'cursor-pointer' : 'cursor-default'
-                }`}
+                className={`font-display text-4xl sm:text-5xl md:text-6xl font-bold text-[#EDEDED] tracking-wide select-none ${'cursor-default'}`}
               >
                 {text}
               </h3>

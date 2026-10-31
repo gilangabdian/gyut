@@ -112,8 +112,8 @@ export class GlitchController implements GlitchInstance {
     this.initElement()
     activeInstances.set(this.element, this)
 
-    // Auto-start if trigger is 'always'
-    if (this.options.trigger === 'always') {
+    // Auto-start if trigger is 'always' or 'once'
+    if (this.options.trigger === 'always' || this.options.trigger === 'once') {
       this.start()
     } else if (this.options.trigger === 'hover') {
       this.setupHoverTrigger()
@@ -251,7 +251,14 @@ export class GlitchController implements GlitchInstance {
         return
       }
 
-      if (!this._isGlitching || this.options.trigger === 'manual') return
+      if (
+        !this._isGlitching ||
+        this.options.trigger === 'manual' ||
+        this.options.trigger === 'once'
+      ) {
+        this._isGlitching = false
+        return
+      }
 
       // Idle pause before next burst: 800ms - 2200ms scaled by speed
       const idleInterval = Math.round(
