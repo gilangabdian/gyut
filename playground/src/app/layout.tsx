@@ -20,9 +20,8 @@ const geist = Geist({
 })
 
 export const metadata: Metadata = {
-  title: 'GYUT — Glitch Your Text',
-  description:
-    'An ultra-lightweight, zero-runtime-dependency animated text glitch library for the modern web.',
+  title: 'GYUTTT | Glitch Your Text',
+  description: 'gyutttt is for glitching your text on the web',
 }
 
 export default function RootLayout({

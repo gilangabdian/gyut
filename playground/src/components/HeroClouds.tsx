@@ -96,7 +96,7 @@ export function HeroClouds() {
             className="font-display text-8xl sm:text-9xl md:text-[10rem] lg:text-[11.5rem] font-bold text-[#FF5FCF] tracking-normal leading-none drop-shadow-[0_14px_45px_rgba(255,95,207,0.4)] cursor-default select-none text-stroke-comic"
             style={{ cursor: 'default' }}
           >
-            GYUT
+            GYUTTT
           </h1>
           <p className="mt-3 font-mono text-sm sm:text-base md:text-lg font-bold tracking-[0.3em] text-[#EDEDED]/90 uppercase cursor-default select-none">
             glitch your text

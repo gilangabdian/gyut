@@ -9,10 +9,10 @@ export function InstallSection() {
   const [copied, setCopied] = useState(false)
 
   const commands: Record<PackageManager, string> = {
-    pnpm: 'pnpm add gyut',
-    npm: 'npm install gyut',
-    yarn: 'yarn add gyut',
-    bun: 'bun add gyut',
+    pnpm: 'pnpm add gyuttt',
+    npm: 'npm install gyuttt',
+    yarn: 'yarn add gyuttt',
+    bun: 'bun add gyuttt',
   }
 
   const handleCopy = async () => {

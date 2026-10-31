@@ -1,7 +1,6 @@
 # gyuttt
 
-[![NPM version](https://img.shields.io/npm/v/gyuttt?color=black
-)](https://www.npmjs.com/package/gyuttt)
+[![NPM version](https://img.shields.io/npm/v/gyuttt?color=black)](https://www.npmjs.com/package/gyuttt)
 
 Glitch your text. It's small, zero dependency, and framework agnostic.
 

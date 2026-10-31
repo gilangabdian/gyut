@@ -94,7 +94,7 @@ export function DemosShowcase() {
     <section className="w-full max-w-6xl mx-auto px-4 py-16">
       <div className="text-center mb-12">
         <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#EDEDED] tracking-wide">
-          See what Gyut can do
+          See what Gyuttt can do
         </h2>
         <p className="mt-2 text-sm sm:text-base font-mono text-[#737373]">
           Explore core behaviors running directly in real-time.

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 // Timestamp of the first commit in the repository (29 Oct 2026 06:44:47 +0700)
 const PROJECT_INCEPTION = 1793231087000
@@ -26,16 +26,25 @@ function getProjectAge(): string {
   return 'build just now'
 }
 
-export function MinimalFooter() {
-  const [projectAge, setProjectAge] = useState<string>('build recently')
+function subscribe(callback: () => void) {
+  const interval = setInterval(callback, 60000)
+  return () => clearInterval(interval)
+}
 
-  useEffect(() => {
-    setProjectAge(getProjectAge())
-    const interval = setInterval(() => {
-      setProjectAge(getProjectAge())
-    }, 60000)
-    return () => clearInterval(interval)
-  }, [])
+function getSnapshot() {
+  return getProjectAge()
+}
+
+function getServerSnapshot() {
+  return 'build recently'
+}
+
+export function MinimalFooter() {
+  const projectAge = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  )
 
   return (
     <footer className="w-full mt-auto pt-16 pb-0 flex flex-col items-center bg-[#000000] border-t border-white/[0.08] overflow-hidden">
@@ -62,10 +71,10 @@ export function MinimalFooter() {
         </div>
       </div>
 
-      {/* Bottom-Most: Gigantic Truus-Style 'gyut' Typography */}
+      {/* Bottom-Most: Gigantic Truus-Style 'gyuttt' Typography */}
       <div className="w-full overflow-hidden flex justify-center items-end select-none pointer-events-none mt-10 -mb-4 sm:-mb-6 md:-mb-10">
         <span className="font-display font-black text-[22vw] leading-[0.72] tracking-tighter text-white/[0.07] uppercase transition-colors">
-          gyut
+          gyuttt
         </span>
       </div>
     </footer>
