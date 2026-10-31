@@ -1,23 +1,23 @@
-# gyut
+# gyuttt
 
 Glitch your text. It's small, zero dependency, and framework agnostic.
 
 ## Install
 
 ```sh
-pnpm add gyut
+pnpm add gyuttt
 ```
 
 ```sh
-npm install gyut
+npm install gyuttt
 ```
 
 ```sh
-yarn add gyut
+yarn add gyuttt
 ```
 
 ```sh
-bun add gyut
+bun add gyuttt
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ bun add gyut
 Pass a CSS selector string or a direct `HTMLElement`:
 
 ```ts
-import { createGlitch } from 'gyut'
+import { createGlitch } from 'gyuttt'
 
 const glitch = createGlitch('#heading', {
   intensity: 0.6,
@@ -46,7 +46,7 @@ Use a `ref` and clean up on unmount:
 
 ```tsx
 import { useEffect, useRef } from 'react'
-import { createGlitch } from 'gyut'
+import { createGlitch } from 'gyuttt'
 
 export function GlitchHeading() {
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -75,7 +75,7 @@ Use a template ref and clean up in `onUnmounted`:
 ```vue
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { createGlitch, type GlitchInstance } from 'gyut'
+import { createGlitch, type GlitchInstance } from 'gyuttt'
 
 const headingRef = ref<HTMLHeadingElement | null>(null)
 let glitch: GlitchInstance | undefined
@@ -108,7 +108,7 @@ Bind the element and clean up in `onMount`:
 ```svelte
 <script>
   import { onMount } from 'svelte'
-  import { createGlitch } from 'gyut'
+  import { createGlitch } from 'gyuttt'
 
   let headingEl
 
@@ -131,14 +131,14 @@ Bind the element and clean up in `onMount`:
 All options are completely modular and can be mixed together freely. For example, a single-shot entrance burst on page load with custom colors, intense slice distortion, and smooth text replacement:
 
 ```ts
-import { createGlitch } from 'gyut'
+import { createGlitch } from 'gyuttt'
 
 const glitch = createGlitch('#hero-title', {
   trigger: 'once', // Runs 1 burst on load/refresh, then stops
   shape: 'slice', // Razor-thin horizontal ribbons
   intensity: 0.8, // Strong visual tearing
   speed: 1.2, // Snappy animation cadence
-  colors: ['#FF5FCF', '#00F0FF', '#FFFFFF'], // Custom multi-color layers
+  colors: ['#FF5FCF', '#00F0FF', '#FFFFFF'], // Custom multi-layer palette
   afterGlitch: {
     type: 'replace',
     text: 'WELCOME TO GYUT', // Final text displayed after glitch

@@ -1,7 +1,7 @@
 {
-  "name": "gyut",
+  "name": "gyuttt",
   "version": "0.1.0",
-  "description": "Glitch your text with GYUT - lightweight, framework-agnostic animated text glitch library",
+  "description": "Glitch your text with GYUTTT - lightweight, framework-agnostic animated text glitch library",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
