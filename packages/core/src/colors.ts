@@ -23,6 +23,14 @@ export function isValidColorString(color: unknown): color is string {
   )
 }
 
+const OFFSETS: readonly (readonly [number, number])[] = [
+  [-2, 1],
+  [2, -1],
+  [0, 2],
+  [-1, -2],
+  [1, 2],
+] as const
+
 /**
  * Resolves colors for an active glitch burst.
  * - If no colors provided or array is empty: generates random coherent pair.
@@ -64,19 +72,11 @@ export function resolveGlitchColors(
   }
 
   // 3+ colors: generate multi-layer chromatic text-shadow
-  // e.g. -2px 0px color3, 0px 2px color4, 2px -1px color5
   const shadowLayers: string[] = []
   const extraColors = userColors.slice(2)
-  const offsets = [
-    [-2, 1],
-    [2, -1],
-    [0, 2],
-    [-1, -2],
-    [1, 2],
-  ]
 
   for (let i = 0; i < extraColors.length; i++) {
-    const offset = offsets[i % offsets.length] ?? [1, 1]
+    const offset = OFFSETS[i % OFFSETS.length] ?? [1, 1]
     shadowLayers.push(`${offset[0]}px ${offset[1]}px 0 ${extraColors[i]}`)
   }
 

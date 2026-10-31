@@ -13,7 +13,6 @@ const activeInstances = new WeakMap<HTMLElement, GlitchInstance>()
 interface OriginalElementState {
   text: string
   style: string | null
-  classList: string[]
   ariaLabel: string | null
 }
 
@@ -84,7 +83,6 @@ export class GlitchController implements GlitchInstance {
     this.originalState = {
       text: this.element.textContent ?? '',
       style: this.element.getAttribute('style'),
-      classList: Array.from(this.element.classList),
       ariaLabel: this.element.getAttribute('aria-label'),
     }
 
@@ -294,18 +292,10 @@ export class GlitchController implements GlitchInstance {
   }
 
   private clearTimers(): void {
-    if (this.burstTimeoutId !== null) {
-      clearTimeout(this.burstTimeoutId)
-      this.burstTimeoutId = null
-    }
-    if (this.idleTimeoutId !== null) {
-      clearTimeout(this.idleTimeoutId)
-      this.idleTimeoutId = null
-    }
-    if (this.transitionTimeoutId !== null) {
-      clearTimeout(this.transitionTimeoutId)
-      this.transitionTimeoutId = null
-    }
+    clearTimeout(this.burstTimeoutId!)
+    clearTimeout(this.idleTimeoutId!)
+    clearTimeout(this.transitionTimeoutId!)
+    this.burstTimeoutId = this.idleTimeoutId = this.transitionTimeoutId = null
   }
 }
 
