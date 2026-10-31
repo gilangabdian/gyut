@@ -1,6 +1,7 @@
 import { HeroClouds } from '../components/HeroClouds'
-import { InstallSection } from '../components/InstallSection'
 import { DemosShowcase } from '../components/DemosShowcase'
+import { InstallSection } from '../components/InstallSection'
+import { UsageSection } from '../components/UsageSection'
 import { LivePlayground } from '../components/LivePlayground'
 import { MinimalFooter } from '../components/MinimalFooter'
 
@@ -11,17 +12,20 @@ export default function Home() {
         {/* 1. Hero with Anime Clouds, "GYUTTT", "glitch your text", & 4 Tilted Polaroids */}
         <HeroClouds />
 
-        {/* 2. Quick Installation Terminal Box */}
-        <InstallSection />
-
-        {/* 3. Curated Feature Demos Showcase */}
+        {/* 2. Curated Feature Demos Showcase ("See what Gyuttt can do") */}
         <DemosShowcase />
 
-        {/* 4. Full Live Interactive Playground & Code Generator */}
+        {/* 3. Quick Installation Terminal Box */}
+        <InstallSection />
+
+        {/* 4. Quick Usage Snippets with Vanilla/React/Morph Tabs */}
+        <UsageSection />
+
+        {/* 5. Full Live Interactive Playground */}
         <LivePlayground />
       </main>
 
-      {/* 5. Minimal Dock Footer with gilangabdian GitHub */}
+      {/* 6. Minimal Dock Footer with gilangabdian GitHub */}
       <MinimalFooter />
     </div>
   )

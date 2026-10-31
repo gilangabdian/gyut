@@ -26,10 +26,10 @@ export function InstallSection() {
   }
 
   return (
-    <section className="w-full max-w-3xl mx-auto px-4 py-12 flex flex-col items-center">
-      <div className="w-full text-center mb-6">
+    <section className="w-full max-w-[580px] mx-auto px-4 py-12 flex flex-col items-start">
+      <div className="w-full text-left mb-6">
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#EDEDED] tracking-wide">
-          Get Started in Seconds
+          Installation
         </h2>
       </div>
 

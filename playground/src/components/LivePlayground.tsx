@@ -134,8 +134,8 @@ export function LivePlayground() {
 
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-16">
-      {/* Clean Heading without subtitle */}
-      <div className="text-center mb-12">
+      {/* Clean Heading left-aligned */}
+      <div className="text-left mb-8">
         <h2 className="font-display text-4xl sm:text-5xl font-bold text-[#EDEDED] tracking-wide">
           Playground
         </h2>
