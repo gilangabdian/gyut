@@ -136,7 +136,7 @@ export function HeroClouds() {
                 ref={card3Ref}
                 className="font-mono text-base sm:text-lg font-bold text-[#FF5FCF] tracking-wider"
               >
-                ~4kb
+                &lt; 3kb
               </span>
             </div>
           </div>
