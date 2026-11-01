@@ -182,7 +182,7 @@ createGlitch('#alert-text', {
 
 By default, GYUTTT automatically selects high-contrast neon pairs from curated palettes (Cyberpunk, Matrix, Synthwave, Tokyo Arcade, High Voltage) on each burst, ensuring vibrant, visually coherent digital glitches without muddy tones or uncontrolled strobe flickering.
 
-You can supply any number of custom colors (`hex`, `rgb`, or `hsl`). GYUTTT maps colors efficiently with **zero runtime DOM overhead**:
+You can supply any number of custom colors (`hex`, `rgb`, `hsl`, or CSS named colors like 'cyan', 'purple'). GYUTTT maps colors efficiently with **zero runtime DOM overhead**:
 
 - **1 color**: Paired with a transparent fallback for single-channel distortion.
 - **2 colors**: Mapped directly to hardware-accelerated CSS pseudo-elements (`::before` and `::after`).
