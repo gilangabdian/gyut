@@ -102,12 +102,25 @@ export function LivePlayground() {
           // 2. Fire glitch (morphs into replace text OR smoothly hides after glitch)
           instanceRef.current?.replay()
 
-          // 3. Hold final state (replace text for 2.2s, or hidden for 2.0s) before cycling back
-          const holdDuration = afterGlitchType === 'hide' ? 2000 : 2200
+          // 3. Calculate burst duration dynamically based on preset and speed
+          const baseBurst =
+            preset === 'smooth'
+              ? 850
+              : preset === 'lag'
+                ? 550
+                : preset === 'long'
+                  ? 2200
+                  : 220
+          const burstDuration = Math.round(baseBurst / speed)
+
+          // 4. Hold final state AFTER the glitch completes (replace for 2.2s, hide for 2.0s)
+          const holdAfterBurst = afterGlitchType === 'hide' ? 2000 : 2200
+          const totalCycleTime = burstDuration + holdAfterBurst
+
           timeoutId = setTimeout(() => {
             if (!active || isPausedRef.current) return
             runLoop()
-          }, holdDuration)
+          }, totalCycleTime)
         }, 1800)
       }
 
@@ -346,19 +359,36 @@ export function LivePlayground() {
             <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
               After Glitch
             </label>
-            <select
-              value={afterGlitchType}
-              onChange={(e) =>
-                setAfterGlitchType(
-                  e.target.value as 'none' | 'hide' | 'replace'
-                )
-              }
-              className="w-full bg-[#12121a] border border-white/10 rounded-lg px-3 py-1.5 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF]"
-            >
-              <option value="none">None</option>
-              <option value="hide">Hide Text</option>
-              <option value="replace">Replace Text</option>
-            </select>
+            <div className="relative w-full">
+              <select
+                value={afterGlitchType}
+                onChange={(e) =>
+                  setAfterGlitchType(
+                    e.target.value as 'none' | 'hide' | 'replace'
+                  )
+                }
+                className="w-full appearance-none bg-[#12121a] border border-white/10 rounded-lg px-3 pr-9 py-1.5 font-mono text-xs text-[#EDEDED] focus:outline-none focus:border-[#FF5FCF] cursor-pointer"
+              >
+                <option value="none">None</option>
+                <option value="hide">Hide Text</option>
+                <option value="replace">Replace Text</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-[#737373]">
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
 
             {afterGlitchType === 'replace' && (
               <input
