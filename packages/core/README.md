@@ -187,7 +187,8 @@ You can supply any number of custom colors (`hex`, `rgb`, or `hsl`). GYUTTT maps
 - **2 colors**: Mapped directly to hardware-accelerated CSS pseudo-elements (`::before` and `::after`).
 - **3+ colors**: The first two colors drive the primary pseudo-elements, while additional colors are stacked as multi-layer chromatic `text-shadow` layers.
 
-> **Tip:** We recommend **2 to 5 colors** for optimal aesthetic glitch contrast and legibility.
+> [!TIP]
+> Use only **2 to 5 colors** for optimal aesthetic glitch contrast and legibility.
 
 ```ts
 // 2-color classic duotone split
