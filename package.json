@@ -6,6 +6,7 @@
     "build": "pnpm --filter gyuttt build && pnpm --filter playground build",
     "build:core": "pnpm --filter gyuttt build",
     "build:playground": "pnpm --filter playground build",
+    "publish:core": "pnpm build:core && pnpm --filter gyuttt publish --access public",
     "test": "pnpm --filter gyuttt test",
     "typecheck": "pnpm -r typecheck",
     "lint": "oxlint",
