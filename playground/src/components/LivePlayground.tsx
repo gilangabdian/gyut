@@ -181,9 +181,7 @@ export function LivePlayground() {
             <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#FF5FCF]">
               Settings
             </h3>
-            <span className="text-[11px] font-mono text-[#737373]">
-              v0.2.0
-            </span>
+            <span className="text-[11px] font-mono text-[#737373]">v0.2.0</span>
           </div>
 
           {/* Text Input */}
@@ -246,7 +244,9 @@ export function LivePlayground() {
           {/* Speed Multiplier Slider */}
           <div className="flex flex-col gap-1.5">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-[#EDEDED]/80 font-medium">Speed Multiplier</span>
+              <span className="text-[#EDEDED]/80 font-medium">
+                Speed Multiplier
+              </span>
               <span className="text-[#FF5FCF] font-bold">{speed}x</span>
             </div>
             <input
