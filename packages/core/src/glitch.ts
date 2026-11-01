@@ -21,6 +21,7 @@ interface OriginalElementState {
 interface NormalizedGlitchOptions {
   intensity: number
   speed: number
+  delay?: number | undefined
   trigger: GlitchTrigger
   shape: GlitchShape
   preset: GlitchPreset
@@ -34,6 +35,7 @@ export class GlitchController implements GlitchInstance {
   private options: NormalizedGlitchOptions
   private originalState: OriginalElementState
   private _isGlitching = false
+  private delayTimer?: any
   private burstTimer?: any
   private idleTimer?: any
   private transTimer?: any
@@ -68,6 +70,7 @@ export class GlitchController implements GlitchInstance {
     this.options = {
       intensity: Math.min(Math.max(options.intensity ?? 0.5, 0.1), 1),
       speed: Math.max(options.speed ?? 1, 0.1),
+      delay: options.delay ? Math.max(options.delay, 0) : undefined,
       trigger: options.trigger ?? 'always',
       shape: options.shape ?? 'classic',
       preset: options.preset ?? 'default',
@@ -190,12 +193,21 @@ export class GlitchController implements GlitchInstance {
   }
 
   start(): void {
-    if (this._isGlitching) return
+    if (this._isGlitching || this.delayTimer) return
 
     if (this.reducedMotion) {
       if (this.options.afterGlitch) {
         this.executeAfterGlitch()
       }
+      return
+    }
+
+    if (this.options.delay && this.options.delay > 0) {
+      this.delayTimer = setTimeout(() => {
+        this.delayTimer = undefined
+        this._isGlitching = true
+        this.scheduleBurst()
+      }, this.options.delay)
       return
     }
 
@@ -220,7 +232,8 @@ export class GlitchController implements GlitchInstance {
     this.element.innerHTML = `<span class="gyut-base">${this.originalState.text}</span>`
     this.element.setAttribute('data-gyut-text', this.originalState.text)
 
-    this.start()
+    this._isGlitching = true
+    this.scheduleBurst()
   }
 
   destroy(): void {
@@ -334,10 +347,15 @@ export class GlitchController implements GlitchInstance {
   }
 
   private clearTimers(): void {
+    clearTimeout(this.delayTimer)
     clearTimeout(this.burstTimer)
     clearTimeout(this.idleTimer)
     clearTimeout(this.transTimer)
-    this.burstTimer = this.idleTimer = this.transTimer = undefined
+    this.delayTimer =
+      this.burstTimer =
+      this.idleTimer =
+      this.transTimer =
+        undefined
   }
 }
 

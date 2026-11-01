@@ -419,4 +419,52 @@ describe('createGlitch lifecycle and DOM behavior', () => {
     expect(el.querySelector('.gyut-base')).toBeNull()
     expect(el.textContent).toBe('SHATTERED BASE TEXT')
   })
+
+  it('delays initial burst when delay option is specified', () => {
+    const el = document.createElement('h1')
+    el.textContent = 'DELAYED START'
+    container.appendChild(el)
+
+    const glitch = createGlitch(el, {
+      trigger: 'always',
+      delay: 1000,
+    })
+
+    // At t=0, delay is pending, so glitch is not active yet
+    expect(glitch.isGlitching).toBe(false)
+    expect(el.classList.contains('gyut--active')).toBe(false)
+
+    // At t=500, still waiting
+    vi.advanceTimersByTime(500)
+    expect(glitch.isGlitching).toBe(false)
+    expect(el.classList.contains('gyut--active')).toBe(false)
+
+    // At t=1000, burst should now fire
+    vi.advanceTimersByTime(500)
+    expect(glitch.isGlitching).toBe(true)
+    expect(el.classList.contains('gyut--active')).toBe(true)
+
+    glitch.destroy()
+  })
+
+  it('cancels pending delay cleanly if stop or destroy is called before delay completes', () => {
+    const el = document.createElement('h1')
+    el.textContent = 'CANCEL DELAY'
+    container.appendChild(el)
+
+    const glitch = createGlitch(el, {
+      trigger: 'always',
+      delay: 1500,
+    })
+
+    vi.advanceTimersByTime(500)
+    glitch.stop()
+
+    // Advance past original delay
+    vi.advanceTimersByTime(1500)
+    expect(glitch.isGlitching).toBe(false)
+    expect(el.classList.contains('gyut--active')).toBe(false)
+
+    glitch.destroy()
+  })
 })

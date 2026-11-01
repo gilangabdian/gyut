@@ -41,6 +41,12 @@ export interface GlitchOptions {
   speed?: number | undefined
 
   /**
+   * Initial startup delay in milliseconds before the first glitch burst fires.
+   * Default: 0
+   */
+  delay?: number | undefined
+
+  /**
    * Trigger mode for animation.
    * - 'always': continuous bursts at intervals.
    * - 'once': fires single burst on load/init and stops.
