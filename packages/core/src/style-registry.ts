@@ -18,7 +18,7 @@ const GYUT_CSS =
   '.gyut-shape-slice.gyut--active::after{animation:gyut-s2 var(--gyut-anim-duration,.16s) infinite var(--gyut-timing,steps(4,jump-none))}' +
   '.gyut-shape-block.gyut--active::before{animation:gyut-b1 var(--gyut-anim-duration,.24s) infinite var(--gyut-timing,steps(3,jump-none))}' +
   '.gyut-shape-block.gyut--active::after{animation:gyut-b2 var(--gyut-anim-duration,.24s) infinite var(--gyut-timing,steps(3,jump-none))}' +
-  '.gyut-target.gyut--hidden{opacity:0!important;pointer-events:none!important;transition:opacity .3s ease}' +
+  '.gyut-target.gyut--hidden{opacity:0!important;pointer-events:none!important}' +
   '.gyut-target.gyut--visibility-hidden{visibility:hidden!important;pointer-events:none!important}' +
   '.gyut-target.gyut--replacing{opacity:0;transform:scale(.98);transition:opacity .12s ease,transform .12s ease}' +
   '@keyframes gyut-base{0%{clip-path:inset(0 0 54% 0);transform:translate(calc(var(--gyut-int)*-6),calc(var(--gyut-int)*1)) skewX(calc(var(--gyut-intensity,1)*-3deg));opacity:.88}33%{clip-path:inset(58% 0 0 0);transform:translate(calc(var(--gyut-int)*7),calc(var(--gyut-int)*-1)) skewX(calc(var(--gyut-intensity,1)*4deg));opacity:.95}66%{clip-path:inset(26% 0 34% 0);transform:translate(calc(var(--gyut-int)*-7),calc(var(--gyut-int)*2)) skewX(calc(var(--gyut-intensity,1)*-2deg));opacity:.84}to{clip-path:none;transform:none;opacity:1}}' +

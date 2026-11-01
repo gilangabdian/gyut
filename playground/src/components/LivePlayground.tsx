@@ -243,26 +243,21 @@ export function LivePlayground() {
             />
           </div>
 
-          {/* Speed Multiplier */}
+          {/* Speed Multiplier Slider */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-mono text-[#EDEDED]/80 font-medium">
-              Speed Multiplier
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {[0.5, 1, 2].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSpeed(s)}
-                  className={`py-1.5 font-mono text-xs rounded-lg border transition-all ${
-                    speed === s
-                      ? 'bg-[#FF5FCF] text-black font-bold border-[#FF5FCF]'
-                      : 'bg-[#12121a] text-[#EDEDED]/80 border-white/10 hover:border-white/30'
-                  }`}
-                >
-                  {s}x
-                </button>
-              ))}
+            <div className="flex justify-between text-xs font-mono">
+              <span className="text-[#EDEDED]/80 font-medium">Speed Multiplier</span>
+              <span className="text-[#FF5FCF] font-bold">{speed}x</span>
             </div>
+            <input
+              type="range"
+              min="0.1"
+              max="5.0"
+              step="0.1"
+              value={speed}
+              onChange={(e) => setSpeed(parseFloat(e.target.value))}
+              className="w-full accent-[#FF5FCF] cursor-pointer"
+            />
           </div>
 
           {/* Shape Selector */}

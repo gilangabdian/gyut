@@ -176,6 +176,55 @@ createGlitch('#alert-text', {
 })
 ```
 
+---
+
+### Custom Colors & Chromatic Stacking
+
+By default, GYUTTT automatically selects high-contrast neon pairs from curated palettes (Cyberpunk, Matrix, Synthwave, Tokyo Arcade, High Voltage) on each burst, ensuring vibrant, visually coherent digital glitches without muddy tones or uncontrolled strobe flickering.
+
+You can supply any number of custom colors (`hex`, `rgb`, or `hsl`). GYUTTT maps colors efficiently with **zero runtime DOM overhead**:
+- **1 color**: Paired with a transparent fallback for single-channel distortion.
+- **2 colors**: Mapped directly to hardware-accelerated CSS pseudo-elements (`::before` and `::after`).
+- **3+ colors**: The first two colors drive the primary pseudo-elements, while additional colors are stacked as multi-layer chromatic `text-shadow` layers.
+
+> [!TIP]
+> Use only **2 to 5 colors** for optimal aesthetic glitch contrast and legibility.
+
+```ts
+// 2-color classic duotone split
+createGlitch('#duotone', {
+  colors: ['#00F0FF', '#FF0055'],
+})
+
+// Multi-color chromatic stack (3+ colors)
+createGlitch('#hyper-palette', {
+  colors: ['#FF5FCF', '#00F0FF', '#FFE600', '#7928CA'],
+})
+```
+
+---
+
+### Speed & Timing Customization
+
+The `speed` multiplier dynamically scales animation duration, burst cadence, and jitter frequency:
+- **Supported Range:** `0.1` to `5.0` (Default: `1`).
+- `speed: 0.2` – `0.5`: Dramatic, cinematic slow-motion effect highlighting individual slice/block offsets.
+- `speed: 1.0`: Balanced standard speed.
+- `speed: 2.0` – `5.0`: Snappy, hyper-speed digital jitter for high-energy futuristic interfaces.
+
+```ts
+// Cinematic slow-motion glitch
+createGlitch('#slow-mo', {
+  speed: 0.3,
+  preset: 'smooth',
+})
+
+// Hyper-frequency rapid glitch
+createGlitch('#hyper-speed', {
+  speed: 3.0,
+})
+```
+
 ## API
 
 ### `createGlitch(target, options?)`
@@ -183,16 +232,16 @@ createGlitch('#alert-text', {
 - **`target`**: `HTMLElement | string` — DOM element or CSS selector (e.g. `'#title'`).
 - **`options`**: Optional configuration object:
 
-| Option                 | Type                                                                                      | Default           | Description                                                                                                                           |
-| :--------------------- | :---------------------------------------------------------------------------------------- | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| `colors`               | `string[]`                                                                                | _Random palettes_ | Array of hex/rgb/hsl color strings. If omitted, picks vibrant random contrast pairs per burst.                                        |
-| `intensity`            | `number`                                                                                  | `0.5`             | Glitch displacement and jitter magnitude (`0.1` subtle to `1.0` intense).                                                             |
-| `speed`                | `number`                                                                                  | `1`               | Speed multiplier for burst cadence and jitter frequency.                                                                              |
-| `shape`                | `'classic' \| 'slice' \| 'block'`                                                         | `'classic'`       | Visual glitch preset (`classic`: RGB shift, `slice`: razor-thin ribbons, `block`: 2D pixel tiles).                                    |
-| `preset`               | `'default' \| 'smooth' \| 'lag' \| 'long'`                                                | `'default'`       | Motion and cadence preset (`default`: stepped digital, `smooth`: analog wave, `lag`: drop-frame stutter, `long`: sustained burst).    |
-| `trigger`              | `'always' \| 'once' \| 'hover' \| 'manual'`                                               | `'always'`        | When to glitch (`always`: continuous intervals, `once`: single burst on load/init, `hover`: on pointer hover, `manual`: via methods). |
-| `afterGlitch`          | `{ type: 'hide', mode?: 'opacity' \| 'visibility' } \| { type: 'replace', text: string }` | `undefined`       | Action after glitch completes: hide element or replace text.                                                                          |
-| `respectReducedMotion` | `boolean`                                                                                 | `true`            | Automatically disables animations when OS `prefers-reduced-motion` is enabled.                                                        |
+| Option                 | Type                                                                                      | Default           | Description                                                                                                                                                                                            |
+| :--------------------- | :---------------------------------------------------------------------------------------- | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `colors`               | `string[]`                                                                                | _Curated pairs_   | Array of color strings (`hex`, `rgb`, `hsl`). 1–2 colors use CSS pseudo-elements; 3+ colors use chromatic `text-shadow` stacking (2–5 recommended). If omitted, picks random curated high-contrast pairs per burst. [See details](#custom-colors--chromatic-stacking). |
+| `intensity`            | `number`                                                                                  | `0.5`             | Glitch displacement and jitter magnitude (`0.1` subtle to `1.0` intense).                                                                                                                              |
+| `speed`                | `number`                                                                                  | `1`               | Speed multiplier (`0.1` to `5.0`). Scales animation duration and jitter frequency. [See details](#speed--timing-customization).                                                                         |
+| `shape`                | `'classic' \| 'slice' \| 'block'`                                                         | `'classic'`       | Visual glitch preset (`classic`: RGB shift, `slice`: razor-thin ribbons, `block`: 2D pixel tiles).                                                                                                     |
+| `preset`               | `'default' \| 'smooth' \| 'lag' \| 'long'`                                                | `'default'`       | Motion and cadence preset (`default`: stepped digital, `smooth`: analog wave, `lag`: drop-frame stutter, `long`: sustained burst).                                                                     |
+| `trigger`              | `'always' \| 'once' \| 'hover' \| 'manual'`                                               | `'always'`        | When to glitch (`always`: continuous intervals, `once`: single burst on load/init, `hover`: on pointer hover, `manual`: via methods).                                                                  |
+| `afterGlitch`          | `{ type: 'hide', mode?: 'opacity' \| 'visibility' } \| { type: 'replace', text: string }` | `undefined`       | Action after glitch completes: hide element or replace text.                                                                                                                                           |
+| `respectReducedMotion` | `boolean`                                                                                 | `true`            | Automatically disables animations when OS `prefers-reduced-motion` is enabled.                                                                                                                         |
 
 ### Return Value: `GlitchInstance`
 
