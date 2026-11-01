@@ -12,6 +12,7 @@ import type {
 export function LivePlayground() {
   const targetRef = useRef<HTMLHeadingElement>(null)
   const instanceRef = useRef<GlitchInstance | null>(null)
+  const isPausedRef = useRef(false)
 
   // Playground state
   const [text, setText] = useState('EDIT ME')
@@ -27,16 +28,25 @@ export function LivePlayground() {
   >('none')
   const [replaceText, setReplaceText] = useState('GLITCH, HERE')
 
-  // Initialize or re-initialize glitch instance whenever options change
+  // Single unified controller: manages instance lifecycle & loop cycle without race conditions
   useEffect(() => {
     if (!targetRef.current) return
+
+    isPausedRef.current = false
+    let timeoutId: NodeJS.Timeout
+    let active = true
 
     // Destroy existing instance
     if (instanceRef.current) {
       instanceRef.current.destroy()
     }
 
-    // Set text
+    // Reset target DOM to clean initial state
+    targetRef.current.classList.remove(
+      'gyut--hidden',
+      'gyut--visibility-hidden',
+      'gyut--replacing'
+    )
     targetRef.current.textContent = text
 
     // Parse colors
@@ -57,17 +67,56 @@ export function LivePlayground() {
       afterGlitch = { type: 'replace' as const, text: replaceText }
     }
 
+    // When looping in playground (trigger === 'always' and afterGlitch is active),
+    // use 'manual' trigger for createGlitch so that the loop orchestrates the timing cleanly
+    const isLoopMode = trigger === 'always' && afterGlitchType !== 'none'
+    const actualTrigger = isLoopMode ? 'manual' : trigger
+
     instanceRef.current = createGlitch(targetRef.current, {
       intensity,
       speed,
       shape,
       preset,
-      trigger,
+      trigger: actualTrigger,
       colors,
       afterGlitch,
     })
 
+    if (isLoopMode) {
+      const runLoop = () => {
+        if (!active || isPausedRef.current) return
+
+        // 1. Reset text to original content, restore visibility, and hold clean for 1.8s
+        if (targetRef.current) {
+          targetRef.current.classList.remove(
+            'gyut--hidden',
+            'gyut--visibility-hidden',
+            'gyut--replacing'
+          )
+          targetRef.current.innerHTML = `<span class="gyut-base">${text}</span>`
+          targetRef.current.setAttribute('data-gyut-text', text)
+        }
+
+        timeoutId = setTimeout(() => {
+          if (!active || isPausedRef.current) return
+          // 2. Fire glitch (morphs into replace text OR smoothly hides after glitch)
+          instanceRef.current?.replay()
+
+          // 3. Hold final state (replace text for 2.2s, or hidden for 2.0s) before cycling back
+          const holdDuration = afterGlitchType === 'hide' ? 2000 : 2200
+          timeoutId = setTimeout(() => {
+            if (!active || isPausedRef.current) return
+            runLoop()
+          }, holdDuration)
+        }, 1800)
+      }
+
+      runLoop()
+    }
+
     return () => {
+      active = false
+      clearTimeout(timeoutId)
       instanceRef.current?.destroy()
     }
   }, [
@@ -83,45 +132,14 @@ export function LivePlayground() {
     replaceText,
   ])
 
-  // Natural looping cycle when trigger is 'always' and afterGlitch is active
-  useEffect(() => {
-    if (trigger !== 'always' || afterGlitchType === 'none') return
-
-    let timeoutId: NodeJS.Timeout
-    let active = true
-
-    const runLoop = () => {
-      if (!active) return
-
-      // 1. Reset text to original content and hold clean for 1.8s
-      if (targetRef.current) {
-        targetRef.current.innerHTML = `<span class="gyut-base">${text}</span>`
-        targetRef.current.setAttribute('data-gyut-text', text)
-      }
-
-      timeoutId = setTimeout(() => {
-        if (!active) return
-        // 2. Fire glitch morph into replacement text!
-        instanceRef.current?.replay()
-
-        // 3. Hold replacement text for 2.2s before cycling back
-        timeoutId = setTimeout(() => {
-          if (!active) return
-          runLoop()
-        }, 2200)
-      }, 1800)
-    }
-
-    runLoop()
-
-    return () => {
-      active = false
-      clearTimeout(timeoutId)
-    }
-  }, [trigger, afterGlitchType, text, replaceText, speed])
-
   const handleReplay = () => {
-    if (afterGlitchType === 'replace' && targetRef.current) {
+    isPausedRef.current = false
+    if (targetRef.current) {
+      targetRef.current.classList.remove(
+        'gyut--hidden',
+        'gyut--visibility-hidden',
+        'gyut--replacing'
+      )
       targetRef.current.innerHTML = `<span class="gyut-base">${text}</span>`
       targetRef.current.setAttribute('data-gyut-text', text)
     }
@@ -129,6 +147,7 @@ export function LivePlayground() {
   }
 
   const handleStop = () => {
+    isPausedRef.current = true
     instanceRef.current?.stop()
   }
 
