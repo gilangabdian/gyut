@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-type TabType = 'typescript' | 'react' | 'vue' | 'svelte'
+type TabType = 'typescript' | 'react'
 
 export function UsageSection() {
   const [activeTab, setActiveTab] = useState<TabType>('typescript')
@@ -43,48 +43,6 @@ export function GlitchHeading() {
 
   return <h1 ref={headingRef}>CYBERNETIC</h1>
 }`,
-
-    vue: `<script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { createGlitch, type GlitchInstance } from 'gyuttt'
-
-const titleRef = ref<HTMLHeadingElement | null>(null)
-let glitch: GlitchInstance | undefined
-
-onMounted(() => {
-  if (titleRef.value) {
-    glitch = createGlitch(titleRef.value, {
-      shape: 'block',
-      intensity: 0.7,
-    })
-  }
-})
-
-onUnmounted(() => {
-  glitch?.destroy()
-})
-</script>
-
-<template>
-  <h1 ref="titleRef">CYBERNETIC</h1>
-</template>`,
-
-    svelte: `<script>
-  import { onMount } from 'svelte'
-  import { createGlitch } from 'gyuttt'
-
-  let titleEl
-
-  onMount(() => {
-    const glitch = createGlitch(titleEl, {
-      trigger: 'hover',
-    })
-
-    return () => glitch.destroy()
-  })
-</script>
-
-<h1 bind:this={titleEl}>Hover to Glitch</h1>`,
   }
 
   const handleCopy = async () => {
@@ -115,7 +73,7 @@ onUnmounted(() => {
 
       // Match strings, tags, keywords, hooks/lifecycle
       const regex =
-        /('(?:\\'|[^'])*'|"(?:\\"|[^"])*"|<\/?[a-zA-Z0-9:-]+(?:\s+[^>]*)?>|\b(?:import|export|from|const|let|return|default|type|function)\b|\b(?:createGlitch|useRef|useEffect|ref|onMounted|onUnmounted|onMount|destroy|start|stop|GlitchInstance)\b)/g
+        /('(?:\\'|[^'])*'|"(?:\\"|[^"])*"|<\/?[a-zA-Z0-9:-]+(?:\s+[^>]*)?>|\b(?:import|export|from|const|let|return|default|type|function)\b|\b(?:createGlitch|useRef|useEffect|ref|destroy|start|stop|GlitchInstance)\b)/g
 
       let match: RegExpExecArray | null
       while ((match = regex.exec(codePart)) !== null) {
@@ -143,9 +101,6 @@ onUnmounted(() => {
             'useRef',
             'useEffect',
             'ref',
-            'onMounted',
-            'onUnmounted',
-            'onMount',
             'destroy',
             'start',
             'stop',
@@ -213,19 +168,17 @@ onUnmounted(() => {
       <div className="w-full bg-[#0c0c14] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
         {/* Header Tabs */}
         <div className="flex items-center justify-between px-4 py-3 bg-[#12121e] border-b border-white/10">
-          <div className="flex gap-1.5 sm:gap-2">
+          <div className="flex gap-2">
             {(
               [
                 { id: 'typescript', label: 'TypeScript' },
                 { id: 'react', label: 'React' },
-                { id: 'vue', label: 'Vue' },
-                { id: 'svelte', label: 'Svelte' },
               ] as const
             ).map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-2.5 sm:px-3 py-1 text-xs font-mono rounded-lg transition-all ${
+                className={`px-3 py-1 text-xs font-mono rounded-lg transition-all ${
                   activeTab === tab.id
                     ? 'bg-[#FF5FCF] text-black font-bold shadow-md'
                     : 'text-[#737373] hover:text-[#EDEDED] hover:bg-white/5'
@@ -290,6 +243,21 @@ onUnmounted(() => {
           </pre>
         </div>
       </div>
+
+      {/* Footer Note with Link to README */}
+      <p className="mt-3 text-xs font-mono text-[#737373] text-left">
+        Also compatible with Vue, Svelte, or any modern framework.{' '}
+        <a
+          href="https://github.com/gilangabdian/gyut#usage"
+          target="_blank"
+          rel="noreferrer"
+          className="text-[#FF5FCF] underline hover:text-[#EDEDED] transition-colors inline-flex items-center gap-0.5"
+        >
+          <span>Check docs</span>
+          <span className="text-[10px]">↗</span>
+        </a>{' '}
+        for more details.
+      </p>
     </section>
   )
 }
